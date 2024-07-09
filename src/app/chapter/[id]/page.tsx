@@ -69,7 +69,7 @@ function Chapter({ params }: { params: { id: string } }) {
                 alt=""
               />
             ))}
-          {(isLoading || isFetching) && (
+          {(isLoading || isFetching || data?.pages.length === 0) && (
             <div className="flex flex-col gap-4 mt-20 items-center justify-center w-full">
               <Loader className="w-8 h-8 animate-spin" />
               <div>
