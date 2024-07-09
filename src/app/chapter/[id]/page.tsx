@@ -32,12 +32,12 @@ function Chapter({ params }: { params: { id: string } }) {
   }, [data?.pages]);
 
   useEffect(() => {
-    if (isTranslating) {
+    if (isTranslating || isLoading || data?.pages.length === 0) {
       setRefreshInterval(1000);
     } else {
       setRefreshInterval(0);
     }
-  }, [isTranslating]);
+  }, [isTranslating, isLoading, data?.pages]);
 
   return (
     <div className="flex flex-col gap-8 py-4 items-center">
