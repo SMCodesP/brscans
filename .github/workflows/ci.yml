@@ -12,29 +12,22 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4.0.0
+      - uses: oven-sh/setup-bun@v1
         with:
-          version: 8
-
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-          cache: 'pnpm'
+          bun-version: latest
 
       - name: Install dependencies
-        run: pnpm install
+        run: bun install
 
       - name: Check types
-        run: pnpm type-check
+        run: bun run type-check
 
       - name: Check linting
-        run: pnpm lint
+        run: bun run lint
 
       - name: Check commits messages
         uses: wagoid/commitlint-github-action@v6

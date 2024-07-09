@@ -1,54 +1,54 @@
 {
-  "name": "typescript-nextjs-starter",
-  "description": "A TypeScript starter for Next.js that includes all you need to build amazing projects",
+  "name": "brscans",
+  "description": "A project to use translator manhwwa and webtoon using AI and OCR",
   "version": "1.0.0",
   "private": true,
-  "author": "João Pedro Schmitz <hey@joaopedro.dev> (@jpedroschmitz)",
-  "license": "MIT",
-  "keywords": [
-    "nextjs",
-    "starter",
-    "typescript"
-  ],
+  "author": "Samuel Pereira da Silva <samuel.silva513@etec.sp.gov.br> (@SMCodesP)",
   "scripts": {
-    "dev": "next",
+    "dev": "next --turbo",
     "build": "next build",
     "start": "next start",
     "type-check": "tsc --noEmit",
-    "lint": "eslint --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\"",
-    "format": "prettier --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\" --write",
+    "lint": "biome lint src",
+    "format": "biome format --write src",
     "postinstall": "husky"
   },
   "lint-staged": {
-    "./src/**/*.{ts,js,jsx,tsx}": [
-      "eslint --ignore-path .gitignore --fix",
-      "prettier --ignore-path .gitignore --write"
+    "./src/**/*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+      "biome check --apply --no-errors-on-unmatched --files-ignore-unknown=true"
     ]
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-tabs": "^1.1.0",
+    "axios": "^1.7.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "cmdk": "^1.0.0",
+    "lucide-react": "^0.406.0",
     "next": "14.2.4",
+    "next-themes": "^0.3.0",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "react-hook-form": "^7.52.1",
+    "sonner": "^1.5.0",
+    "swr": "^2.2.5",
+    "tailwind-merge": "^2.4.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.8.3",
     "@commitlint/cli": "19.3.0",
     "@commitlint/config-conventional": "19.2.2",
-    "@ianvs/prettier-plugin-sort-imports": "4.3.0",
     "@types/node": "20.14.10",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
-    "@typescript-eslint/eslint-plugin": "7.15.0",
-    "@typescript-eslint/parser": "7.15.0",
-    "eslint": "8.57.0",
-    "eslint-config-next": "14.2.4",
-    "eslint-config-prettier": "9.1.0",
-    "eslint-import-resolver-typescript": "3.6.1",
-    "eslint-plugin-import": "2.29.1",
-    "eslint-plugin-prettier": "5.1.3",
+    "autoprefixer": "^10.4.19",
     "husky": "9.0.11",
     "lint-staged": "15.2.7",
-    "prettier": "3.3.2",
-    "prettier-plugin-sort-json": "4.0.0",
+    "postcss": "^8.4.39",
+    "tailwindcss": "^3.4.4",
     "typescript": "5.5.3"
   }
 }

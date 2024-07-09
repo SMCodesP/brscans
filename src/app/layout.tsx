@@ -2,19 +2,27 @@ import { Metadata } from 'next';
 
 import './globals.css';
 
+import { Toaster } from '@/components/ui/sonner';
+import { SWRProvider } from '@/providers/swr-provider';
 import { Inter } from 'next/font/google';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: `TypeScript starter for Next.js by João Pedro Schmitz`,
-  description: `TypeScript starter for Next.js that includes all you need to build amazing apps`,
+  title: `Página Incial - BRScans`,
+  description: ``,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="pt-br">
+      <body className={inter.className}>
+        <SWRProvider>{children}</SWRProvider>
+
+        <Toaster position="bottom-center" />
+      </body>
     </html>
   );
 }
