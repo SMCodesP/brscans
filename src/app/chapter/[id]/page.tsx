@@ -13,18 +13,19 @@ import useSWR from 'swr';
 
 function Chapter({ params }: { params: { id: string } }) {
   const [refreshInterval, setRefreshInterval] = useState(0);
-  const { data, isLoading } = useSWR<TChapter>(
-    `/chapters/${params.id}/`,
-    {
-      refreshInterval,
-    }
-  );
+  const { data } = useSWR<TChapter>(`/chapters/${params.id}/`, {
+    refreshInterval,
+  });
   const [type, setType] = useState<keyof TPage['images']>('original');
 
   const isTranslating = useMemo(() => {
     return data?.pages.some(
       (page) => page.images.translated === null
     );
+  }, [data?.pages]);
+
+  const isLoading = useMemo(() => {
+    return data?.pages.some((page) => page.images.original === null);
   }, [data?.pages]);
 
   useEffect(() => {
