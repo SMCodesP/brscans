@@ -1,4 +1,5 @@
 'use client';
+import { Button } from '@/components/ui/button';
 import {
   Tabs,
   TabsContent,
@@ -6,14 +7,18 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs';
 import { Loader } from 'lucide-react';
+import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import useSWR from 'swr';
 
 function Chapter({ params }: { params: { id: string } }) {
   const [refreshInterval, setRefreshInterval] = useState(0);
-  const { data } = useSWR<TChapter>(`/chapters/${params.id}/`, {
-    refreshInterval,
-  });
+  const { data, isLoading } = useSWR<TChapter>(
+    `/chapters/${params.id}/`,
+    {
+      refreshInterval,
+    }
+  );
   const [type, setType] = useState<keyof TPage['images']>('original');
 
   const isTranslating = useMemo(() => {
@@ -31,8 +36,8 @@ function Chapter({ params }: { params: { id: string } }) {
   }, [isTranslating]);
 
   return (
-    <div className="flex flex-col items-center">
-      <h1 className="text-2xl text-neutral-600 font-semibold my-8">
+    <div className="flex flex-col gap-8 py-4 items-center">
+      <h1 className="text-2xl text-neutral-600 font-semibold">
         {data?.title}
       </h1>
 
@@ -60,6 +65,19 @@ function Chapter({ params }: { params: { id: string } }) {
                 alt=""
               />
             ))}
+          {isLoading && (
+            <div className="flex flex-col gap-4 mt-20 items-center justify-center w-full">
+              <Loader className="w-8 h-8 animate-spin" />
+              <div>
+                <h2 className="text-xl text-center text-neutral-600 font-semibold">
+                  Carregando...
+                </h2>
+                <h3 className="text-neutral-600">
+                  Aguarde um momento.
+                </h3>
+              </div>
+            </div>
+          )}
           {isTranslating && type === 'translated' && (
             <div className="flex flex-col gap-4 mt-20 items-center justify-center w-full">
               <Loader className="w-8 h-8 animate-spin" />
@@ -75,6 +93,10 @@ function Chapter({ params }: { params: { id: string } }) {
           )}
         </div>
       </Tabs>
+
+      <Link href="/chapter">
+        <Button>Traduzir outro</Button>
+      </Link>
     </div>
   );
 }
