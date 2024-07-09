@@ -13,9 +13,12 @@ import useSWR from 'swr';
 
 function Chapter({ params }: { params: { id: string } }) {
   const [refreshInterval, setRefreshInterval] = useState(0);
-  const { data } = useSWR<TChapter>(`/chapters/${params.id}/`, {
-    refreshInterval,
-  });
+  const { data, isLoading: isFetching } = useSWR<TChapter>(
+    `/chapters/${params.id}/`,
+    {
+      refreshInterval,
+    }
+  );
   const [type, setType] = useState<keyof TPage['images']>('original');
 
   const isTranslating = useMemo(() => {
@@ -66,7 +69,7 @@ function Chapter({ params }: { params: { id: string } }) {
                 alt=""
               />
             ))}
-          {isLoading && (
+          {(isLoading || isFetching) && (
             <div className="flex flex-col gap-4 mt-20 items-center justify-center w-full">
               <Loader className="w-8 h-8 animate-spin" />
               <div>
