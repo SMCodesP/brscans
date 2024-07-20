@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 
 import './globals.css';
 
+import Header from '@/components/Header';
 import { Toaster } from '@/components/ui/sonner';
 import { SWRProvider } from '@/providers/swr-provider';
 import { Inter } from 'next/font/google';
@@ -19,6 +20,8 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={inter.className}>
+        <Header />
+
         <SWRProvider>{children}</SWRProvider>
 
         <Toaster position="bottom-center" />

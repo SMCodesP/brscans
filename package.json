@@ -5,7 +5,7 @@
   "private": true,
   "author": "Samuel Pereira da Silva <samuel.silva513@etec.sp.gov.br> (@SMCodesP)",
   "scripts": {
-    "dev": "next --turbo",
+    "dev": "next",
     "build": "next build",
     "start": "next start",
     "type-check": "tsc --noEmit",
@@ -19,7 +19,9 @@
     ]
   },
   "dependencies": {
+    "@octokit/graphql": "^8.1.1",
     "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.0",
     "axios": "^1.7.2",
@@ -29,13 +31,16 @@
     "lucide-react": "^0.406.0",
     "next": "14.2.4",
     "next-themes": "^0.3.0",
+    "polished": "^4.3.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-hook-form": "^7.52.1",
     "sonner": "^1.5.0",
     "swr": "^2.2.5",
     "tailwind-merge": "^2.4.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "translatte": "^3.0.1",
+    "waifu.it": "^1.2.1"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
