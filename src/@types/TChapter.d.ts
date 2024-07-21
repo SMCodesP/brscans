@@ -4,5 +4,7 @@ interface TChapter {
   slug: string;
   release_date: string;
   manhwa: null;
-  pages: TPage[];
+  previous: TChapter;
+  next: TChapter;
+  pages?: TPage[];
 }

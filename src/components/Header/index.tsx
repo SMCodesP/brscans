@@ -15,17 +15,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import Link from 'next/link';
 
 const Header: React.FC = () => {
   return (
-    <header className="py-10 px-12">
+    <header className="py-10 px-2 md:px-12">
       <nav className="flex justify-between">
-        <h1 className="font-extrabold text-2xl uppercase">Logo</h1>
+        <Link href="/">
+          <h1 className="font-extrabold text-2xl uppercase">Logo</h1>
+        </Link>
 
-        <ul className="flex gap-6 text-slate-400">
-          <li className="cursor-pointer transition-colors hover:text-slate-700">
-            Início
-          </li>
+        <ul className="gap-6 text-slate-400 hidden sm:flex">
+          <Link href="/">
+            <li className="cursor-pointer transition-colors hover:text-slate-700">
+              Início
+            </li>
+          </Link>
           <li className="cursor-pointer transition-colors hover:text-slate-700">
             Novos
           </li>
@@ -51,14 +56,18 @@ const Header: React.FC = () => {
               <DropdownMenuLabel>Adicionar novo:</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <div className="text-slate-600">
-                <DropdownMenuItem>
-                  <ScrollText className="w-4 h-4 mr-1.5" />
-                  Capítulo
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <BookOpenText className="w-4 h-4 mr-1.5" />
-                  Manga
-                </DropdownMenuItem>
+                <Link href="/manga">
+                  <DropdownMenuItem>
+                    <ScrollText className="w-4 h-4 mr-1.5" />
+                    Capítulo
+                  </DropdownMenuItem>
+                </Link>
+                <Link href="/manga">
+                  <DropdownMenuItem>
+                    <BookOpenText className="w-4 h-4 mr-1.5" />
+                    Manga
+                  </DropdownMenuItem>
+                </Link>
               </div>
             </DropdownMenuContent>
           </DropdownMenu>

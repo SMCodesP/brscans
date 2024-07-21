@@ -13,13 +13,16 @@ const Welcome: React.FC = async () => {
 
   return (
     <div
-      className={cn('flex relative w-full h-96 rounded-lg')}
+      className={cn(
+        'flex relative w-full min-h-96 rounded-lg md:!bg-transparent'
+      )}
       style={{
         boxShadow: `0 0 10px 0 ${data.color_anime}`,
+        background: data.color_anime,
       }}
     >
       <div
-        className="flex pt-20 pl-16 pb-8 pr-8 gap-24 w-full z-10 justify-between rounded-lg"
+        className="flex flex-col sm:flex-row pt-20 pl-16 pb-8 pr-8 gap-4 sm:gap-4 md:gap-8 lg:gap-16 xl:gap-24 w-full z-10 justify-between rounded-lg"
         style={{
           background: `linear-gradient(to right, ${data.color_anime} 80%, ${transparentize(0.5, data.color_anime)})`,
         }}
@@ -45,11 +48,11 @@ const Welcome: React.FC = async () => {
           src={data.image_character}
           width={128}
           height={128}
-          className="rounded-lg self-end w-32"
+          className="rounded-lg self-center w-1/2 md:self-end md:w-32"
           alt="Character"
         />
       </div>
-      <div className="absolute self-end right-0 top-0 h-full aspect-[6/8]">
+      <div className="absolute self-end right-0 top-0 h-full aspect-[6/8] hidden md:flex">
         <Image
           src={data.image_anime}
           width={384}

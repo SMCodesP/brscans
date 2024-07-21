@@ -1,8 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL:
-    'https://6p7hcw5uj1.execute-api.sa-east-1.amazonaws.com/dev',
+  baseURL: String(process.env.NEXT_PUBLIC_API_URL),
 });
 
 const fetcher = async (url: string) => {
