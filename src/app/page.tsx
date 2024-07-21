@@ -1,6 +1,6 @@
 import Welcome from '@/components/Welcome';
 
-export default function Home() {
+function Home() {
   return (
     <main className="px-12">
       <div className="grid grid-cols-3 gap-12">
@@ -11,3 +11,7 @@ export default function Home() {
     </main>
   );
 }
+
+export const revalidate = 30;
+
+export default Home;

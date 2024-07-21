@@ -33,6 +33,4 @@ function Manga({ params }: { params: { id: string } }) {
   );
 }
 
-export const revalidate = 30;
-
 export default Manga;
