@@ -22,17 +22,17 @@ function Chapter({ params }: { params: { id: string } }) {
   const [type, setType] = useState<keyof TPage['images']>('original');
 
   const isTranslating = useMemo(() => {
-    return data?.pages.some(
+    return data?.pages?.some(
       (page) => page.images.translated === null
     );
   }, [data?.pages]);
 
   const isLoading = useMemo(() => {
-    return data?.pages.some((page) => page.images.original === null);
+    return data?.pages?.some((page) => page.images.original === null);
   }, [data?.pages]);
 
   useEffect(() => {
-    if (isTranslating || isLoading || data?.pages.length === 0) {
+    if (isTranslating || isLoading || data?.pages?.length === 0) {
       setRefreshInterval(1000);
     } else {
       setRefreshInterval(0);
@@ -62,14 +62,14 @@ function Chapter({ params }: { params: { id: string } }) {
         <div>
           {((!isTranslating && type === 'translated') ||
             type !== 'translated') &&
-            data?.pages.map((page) => (
+            data?.pages?.map((page) => (
               <img
                 key={page.id}
                 src={String(page.images[type])}
                 alt=""
               />
             ))}
-          {(isLoading || isFetching || data?.pages.length === 0) && (
+          {(isLoading || isFetching || data?.pages?.length === 0) && (
             <div className="flex flex-col gap-4 mt-20 items-center justify-center w-full">
               <Loader className="w-8 h-8 animate-spin" />
               <div>
