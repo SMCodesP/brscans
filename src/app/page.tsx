@@ -5,7 +5,6 @@ import Link from 'next/link';
 
 async function Home() {
   const latestManhwas = await Manhwa.getLatest();
-  console.log(latestManhwas);
 
   return (
     <main className="px-2 sm:px-12">

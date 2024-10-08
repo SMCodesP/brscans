@@ -80,8 +80,8 @@ async function getQuote(): Promise<TQuote> {
         character.media.edges[0].node.coverImage.color || `#000000`,
     };
   } catch (error) {
-    // eslint-disable-next-line no-return-await
-    return await getQuote();
+    console.log(error);
+    throw error;
   }
 }
 
