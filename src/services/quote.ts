@@ -4,12 +4,18 @@ import { cache } from 'react';
 import * as translatte from 'translatte';
 import Client from 'waifu.it';
 import anilist from './anilist';
+import waifu from './waifu';
 
 async function getQuote(): Promise<TQuote> {
   try {
-    const waifuIt = new Client(process.env.WAIFU_IT);
+    // const waifuIt = new Client(process.env.WAIFU_IT);
 
-    const response = await waifuIt.getQuote();
+    const { data } = await waifu.get<{
+      id: number;
+      quote: string;
+      anime: string;
+      author: string;
+    }>('/quote');
 
     const {
       Page: {
@@ -44,34 +50,31 @@ async function getQuote(): Promise<TQuote> {
       }
     `,
       {
-        search: response.author,
+        search: data.author,
       }
     );
 
     if (
       !character ||
-      !response ||
+      !data ||
       !character.media ||
       character.media.edges.length === 0
     )
       throw new Error(`Incomplete`);
 
-    const quoteTranslated = await translatte(response.quote, {
-      to: `pt`,
-    });
+    // const quoteTranslated = await translatte(data.quote, {
+    //   to: `pt`,
+    // });
 
     if (character.media.edges[0].node.coverImage.color === null)
       throw new Error(`Not have color in banner of anime`);
 
     return {
-      quote:
-        response.quote.length > 1000
-          ? `${quoteTranslated.text}…`
-          : quoteTranslated.text,
-      character: response.author,
+      quote: data.quote,
+      character: data.author,
       image_character: character.image.large,
       image_character_medium: character.image.medium,
-      anime: response.anime,
+      anime: data.anime,
       image_anime:
         character.media.edges[0].node.coverImage.extraLarge,
       image_anime_medium:
