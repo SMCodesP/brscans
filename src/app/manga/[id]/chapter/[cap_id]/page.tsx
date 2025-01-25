@@ -1,6 +1,7 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useLocalStorageState } from 'ahooks';
 import { Loader } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
@@ -17,7 +18,12 @@ function Chapter({
     }
   );
   const { data: manhwa } = useSWR<TManga>(`/manhwas/${params.id}/`);
-  const [type, setType] = useState<keyof TPage['images']>('original');
+  const [type, setType] = useLocalStorageState<keyof TPage['images']>(
+    'type',
+    {
+      defaultValue: 'original',
+    }
+  );
 
   const isTranslating = useMemo(() => {
     return data?.pages?.some(
@@ -78,8 +84,9 @@ function Chapter({
             data?.pages?.map((page) => (
               <img
                 key={page.id}
-                src={String(page.images[type])}
+                src={String(page.images[type || 'original'])}
                 alt=""
+                className="w-full"
               />
             ))}
           {(isLoading || isFetching || data?.pages?.length === 0) && (

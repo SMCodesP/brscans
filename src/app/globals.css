@@ -59,6 +59,7 @@
   }
 }
 
+
 @layer base {
   * {
     @apply border-border;
@@ -70,13 +71,23 @@
     @apply text-slate-600;
   }
 
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    /* Ensures body expands to full viewport height */
+  }
+
   body::before {
     display: block;
-    position: absolute;
+    position: fixed;
+    /* Fixed ensures it covers the viewport even during scrolling */
     left: 0;
     top: 0;
     width: 100%;
-    min-height: 100vh;
+    height: 100%;
+    /* Covers the full height of the body or viewport */
     content: "";
     background-image:
       radial-gradient(at 43% 87%, hsla(209, 79%, 67%, 1) 0px, transparent 50%),
@@ -84,5 +95,6 @@
       radial-gradient(at 29% 7%, hsla(182, 76%, 71%, 1) 0px, transparent 50%);
     opacity: 0.1;
     z-index: -1;
+    /* Remains behind other content */
   }
 }
