@@ -41,7 +41,7 @@ const ChapterSearch = () => {
   });
 
   return (
-    <div className="flex items-center justify-center h-svh w-full bg-neutral-200">
+    <div className="flex items-center justify-center min-h-svh w-full bg-neutral-200">
       <form
         className="flex flex-col gap-4 items-center justify-center w-full px-3"
         onSubmit={onSubmit}

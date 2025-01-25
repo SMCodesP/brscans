@@ -26,7 +26,7 @@ async function Home() {
         <h2 className="text-2xl font-bold mb-4 text-center sm:text-start">
           Últimos mangas adicionados
         </h2>
-        <ul className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-6">
+        <ul className="grid grid-cols-[repeat(auto-fill,_minmax(200px,1fr))] gap-6">
           {latestManhwas.results.map((manhwa) => (
             <Link href={`/manga/${manhwa.id}/`} key={manhwa.id}>
               <li className="flex flex-col gap-1 group w-full">
