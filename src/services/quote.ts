@@ -6,7 +6,7 @@ import Client from 'waifu.it';
 import anilist from './anilist';
 import waifu from './waifu';
 
-async function getQuote(): Promise<TQuote> {
+async function getQuote(tries = 3, repeated = 0): Promise<TQuote> {
   try {
     // const waifuIt = new Client(process.env.WAIFU_IT);
 
@@ -83,8 +83,10 @@ async function getQuote(): Promise<TQuote> {
         character.media.edges[0].node.coverImage.color || `#000000`,
     };
   } catch (error) {
-    console.log(error);
-    throw error;
+    if (repeated < tries) {
+      return await getQuote(tries, repeated + 1);
+    }
+    throw new Error(`Error in getQuote`);
   }
 }
 

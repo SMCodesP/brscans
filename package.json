@@ -5,7 +5,7 @@
   "private": true,
   "author": "Samuel Pereira da Silva <samuel.silva513@etec.sp.gov.br> (@SMCodesP)",
   "scripts": {
-    "dev": "next",
+    "dev": "next --turbo",
     "build": "next build",
     "start": "next start",
     "type-check": "tsc --noEmit",
