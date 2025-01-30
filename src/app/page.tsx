@@ -4,7 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 async function Home() {
-  const latestManhwas = await Manhwa.getLatest();
+  const latestManhwas = await new Manhwa().getLatest();
+  console.log(latestManhwas);
 
   return (
     <main className="px-2 sm:px-12">
@@ -27,7 +28,7 @@ async function Home() {
           Últimos mangas adicionados
         </h2>
         <ul className="grid grid-cols-[repeat(auto-fill,_minmax(200px,1fr))] gap-6">
-          {latestManhwas.results.map((manhwa) => (
+          {latestManhwas?.results?.map((manhwa) => (
             <Link href={`/manga/${manhwa.id}/`} key={manhwa.id}>
               <li className="flex flex-col gap-1 group w-full">
                 <div className="aspect-[6/8] w-full overflow-hidden rounded-lg">

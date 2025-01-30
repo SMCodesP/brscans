@@ -14,7 +14,7 @@ import useSWR from 'swr';
 function Chapter({ params }: { params: { id: string } }) {
   const [refreshInterval, setRefreshInterval] = useState(0);
   const { data, isLoading: isFetching } = useSWR<TChapter>(
-    `/chapters/${params.id}/`,
+    `chapters/${params.id}/`,
     {
       refreshInterval,
     }

@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-import api from '@/services/api';
+import { api } from '@/services/api';
 import { Loader, Search } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -21,11 +21,12 @@ const ChapterSearch = () => {
   });
 
   const getManga = async (link: string) => {
-    const { data } = await api.get<TChapter>('/chapters/download', {
-      params: {
+    const response = await api.get<TChapter>('chapters/download', {
+      searchParams: {
         link,
       },
     });
+    const data = await response.json();
     router.push(`/chapter/${data.id}`);
   };
 

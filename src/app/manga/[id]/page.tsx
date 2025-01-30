@@ -1,11 +1,10 @@
-'use client';
-
+import Manhwa from '@/services/actions/Manhwa';
 import Image from 'next/image';
 import Link from 'next/link';
 import useSWR from 'swr';
 
-function Manga({ params }: { params: { id: string } }) {
-  const { data } = useSWR<TManga>(`/manhwas/${params.id}/`);
+async function Manga({ params }: { params: { id: string } }) {
+  const data = await new Manhwa().get(params.id);
 
   return (
     <div className="px-2 md:px-12">
@@ -36,7 +35,10 @@ function Manga({ params }: { params: { id: string } }) {
         <h2 className="text-2xl font-bold">Capítulos</h2>
         <ul className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mt-2">
           {data?.chapters.map((chapter) => (
-            <Link href={`/manga/${data.id}/chapter/${chapter.id}/`}>
+            <Link
+              href={`/manga/${data.id}/chapter/${chapter.id}/`}
+              key={chapter.id}
+            >
               <li
                 key={chapter.id}
                 className="text-center p-2 border border-primary/10 hover:bg-primary/10 hover:border-primary rounded-md transition-all"
@@ -50,5 +52,7 @@ function Manga({ params }: { params: { id: string } }) {
     </div>
   );
 }
+
+export const revalidate = 300;
 
 export default Manga;

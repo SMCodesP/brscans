@@ -1,14 +1,14 @@
-import axios from 'axios';
+import ky, { Options } from 'ky';
 
-const api = axios.create({
-  baseURL: String(process.env.NEXT_PUBLIC_API_URL),
-});
-
-const fetcher = async (url: string) => {
-  const { data } = await api.get(url);
-  return data;
+const config: Options = {
+  prefixUrl: String(process.env.NEXT_PUBLIC_API_URL),
 };
 
-export { fetcher };
+const api = ky.extend(config);
 
-export default api;
+const fetcher = async (url: string) => {
+  const response = await api.get(url);
+  return response.json();
+};
+
+export { api, fetcher };

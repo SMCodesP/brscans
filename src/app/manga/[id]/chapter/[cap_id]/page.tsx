@@ -12,12 +12,12 @@ function Chapter({
 }: { params: { cap_id: string; id: string } }) {
   const [refreshInterval, setRefreshInterval] = useState(0);
   const { data, isLoading: isFetching } = useSWR<TChapter>(
-    `/chapters/${params.cap_id}/`,
+    `chapters/${params.cap_id}/`,
     {
       refreshInterval,
     }
   );
-  const { data: manhwa } = useSWR<TManga>(`/manhwas/${params.id}/`);
+  const { data: manhwa } = useSWR<TManga>(`manhwas/${params.id}/`);
   const [type, setType] = useLocalStorageState<keyof TPage['images']>(
     'type',
     {
