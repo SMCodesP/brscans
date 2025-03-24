@@ -54,5 +54,6 @@ async function Manga({ params }: { params: { id: string } }) {
 }
 
 export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 export default Manga;

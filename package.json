@@ -5,7 +5,7 @@
   "private": true,
   "author": "Samuel Pereira da Silva <samuel.silva513@etec.sp.gov.br> (@SMCodesP)",
   "scripts": {
-    "dev": "next --turbo",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "type-check": "tsc --noEmit",
@@ -33,6 +33,7 @@
     "lucide-react": "^0.406.0",
     "next": "14.2.4",
     "next-themes": "^0.3.0",
+    "openai": "^4.89.0",
     "polished": "^4.3.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
