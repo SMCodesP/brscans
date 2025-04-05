@@ -3,9 +3,22 @@
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import * as React from 'react';
 
+import { changeCookieServer } from '@/app/actions';
 import { cn } from '@/lib/utils';
 
 const Tabs = TabsPrimitive.Root;
+
+const TabsCookies: React.FC<
+  React.ComponentProps<typeof Tabs> & {
+    name: string;
+  }
+> = ({ name, ...props }) => {
+  const changeCookie = (value: string) => {
+    changeCookieServer(name, value);
+  };
+
+  return <Tabs {...props} onValueChange={changeCookie} />;
+};
 
 const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
@@ -52,4 +65,4 @@ const TabsContent = React.forwardRef<
 ));
 TabsContent.displayName = TabsPrimitive.Content.displayName;
 
-export { Tabs, TabsList, TabsTrigger, TabsContent };
+export { Tabs, TabsCookies, TabsList, TabsTrigger, TabsContent };

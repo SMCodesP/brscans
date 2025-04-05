@@ -1,6 +1,6 @@
 import { api } from './api';
 
-export type endpoints = 'manhwas';
+export type endpoints = 'manhwas' | 'chapters';
 
 class Viewset<T> {
   public orgId: number | string | undefined;

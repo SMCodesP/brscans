@@ -3,8 +3,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import useSWR from 'swr';
 
-async function Manga({ params }: { params: { id: string } }) {
-  const data = await new Manhwa().get(params.id);
+async function Manga({
+  params,
+}: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const data = await new Manhwa().get(id);
 
   return (
     <div className="px-2 md:px-12">
@@ -53,7 +56,7 @@ async function Manga({ params }: { params: { id: string } }) {
   );
 }
 
+export const experimental_ppr = true;
 export const revalidate = 300;
-export const dynamic = 'force-dynamic';
 
 export default Manga;

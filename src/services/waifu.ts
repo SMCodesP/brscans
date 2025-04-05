@@ -1,7 +1,7 @@
-import axios from 'axios';
+import ky from 'ky';
 
-const waifu = axios.create({
-  baseURL: 'https://waifu.it/api/v4',
+const waifu = ky.extend({
+  prefixUrl: 'https://waifu.it/api/v4',
   headers: {
     Authorization: process.env.WAIFU_IT,
   },

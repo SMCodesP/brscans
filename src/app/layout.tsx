@@ -14,9 +14,7 @@ export const metadata: Metadata = {
   description: ``,
 };
 
-export default function RootLayout({
-  children,
-}: { children: React.ReactNode }) {
+function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-br">
       <body className={inter.className}>
@@ -29,3 +27,6 @@ export default function RootLayout({
     </html>
   );
 }
+
+export const experimental_ppr = true;
+export default RootLayout;

@@ -1,8 +1,8 @@
 'use server';
 
 import { cache } from 'react';
-import anilist from './anilist';
-import waifu from './waifu';
+// import anilist from './anilist';
+// import waifu from './waifu';
 
 async function getQuote(tries = 3, repeated = 0): Promise<TQuote> {
   try {

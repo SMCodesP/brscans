@@ -4,6 +4,9 @@ const nextConfig = {
   images: {
     domains: ['s4.anilist.co'],
   },
+  experimental: {
+    ppr: 'incremental',
+  },
 };
 
 module.exports = nextConfig;
