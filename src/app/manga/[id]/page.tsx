@@ -1,7 +1,6 @@
 import Manhwa from '@/services/actions/Manhwa';
 import Image from 'next/image';
 import Link from 'next/link';
-import useSWR from 'swr';
 
 async function Manga({
   params,
