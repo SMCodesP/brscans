@@ -182,3 +182,7 @@
     /* Remains behind other content */
   }
 }
+
+button {
+  cursor: pointer;
+}
