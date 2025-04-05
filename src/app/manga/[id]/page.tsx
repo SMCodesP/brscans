@@ -10,7 +10,7 @@ async function Manga({
   const data = await new Manhwa().get(id);
 
   return (
-    <div className="px-2 md:px-12">
+    <main className="px-2 md:px-12 pb-16">
       <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
         {data?.thumbnail?.original && (
           <div className="relative aspect-7/10 w-64">
@@ -36,7 +36,7 @@ async function Manga({
 
       <div className="mt-8">
         <h2 className="text-2xl font-bold">Capítulos</h2>
-        <ul className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mt-2">
+        <ul className="flex flex-wrap gap-4 mt-2">
           {data?.chapters.map((chapter) => (
             <Link
               href={`/manga/${data.id}/chapter/${chapter.id}/`}
@@ -45,7 +45,7 @@ async function Manga({
             >
               <li
                 key={chapter.id}
-                className="text-center p-2 border border-primary/10 hover:bg-primary/10 hover:border-primary rounded-md transition-all"
+                className="text-center w-72 p-2 border border-primary/10 hover:bg-primary/10 hover:border-primary rounded-md transition-all"
               >
                 <p>{chapter.title}</p>
               </li>
@@ -53,7 +53,7 @@ async function Manga({
           ))}
         </ul>
       </div>
-    </div>
+    </main>
   );
 }
 
