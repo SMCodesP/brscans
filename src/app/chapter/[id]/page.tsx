@@ -1,20 +1,17 @@
 'use client';
+
 import { Button } from '@/components/ui/button';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Loader } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { use, useEffect, useMemo, useState } from 'react';
 import useSWR from 'swr';
 
-function Chapter({ params }: { params: { id: string } }) {
+function Chapter({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const [refreshInterval, setRefreshInterval] = useState(0);
   const { data, isLoading: isFetching } = useSWR<TChapter>(
-    `chapters/${params.id}/`,
+    `chapters/${id}/`,
     {
       refreshInterval,
     }

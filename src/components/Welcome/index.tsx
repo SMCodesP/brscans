@@ -14,7 +14,7 @@ const Welcome: React.FC = async () => {
   return (
     <div
       className={cn(
-        'flex relative w-full min-h-96 rounded-lg md:!bg-transparent'
+        'flex relative w-full min-h-96 rounded-lg md:bg-transparent!'
       )}
       style={{
         boxShadow: `0 0 10px 0 ${data.color_anime}`,
@@ -52,7 +52,7 @@ const Welcome: React.FC = async () => {
           alt="Character"
         />
       </div>
-      <div className="absolute self-end right-0 top-0 h-full aspect-[6/8] hidden md:flex">
+      <div className="absolute self-end right-0 top-0 h-full aspect-6/8 hidden md:flex">
         <Image
           src={data.image_anime}
           width={384}

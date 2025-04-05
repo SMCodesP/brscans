@@ -13,7 +13,7 @@ async function Manga({
     <div className="px-2 md:px-12">
       <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
         {data?.thumbnail?.original && (
-          <div className="relative aspect-[7/10] w-64">
+          <div className="relative aspect-7/10 w-64">
             <Image
               src={data?.thumbnail?.original}
               alt="Image thumbnail manga"
