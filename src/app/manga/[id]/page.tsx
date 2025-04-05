@@ -57,6 +57,6 @@ async function Manga({
 }
 
 export const experimental_ppr = true;
-export const revalidate = 300;
+export const revalidate = 120;
 
 export default Manga;

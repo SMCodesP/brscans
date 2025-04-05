@@ -29,4 +29,5 @@ function RootLayout({ children }: { children: React.ReactNode }) {
 }
 
 export const experimental_ppr = true;
+
 export default RootLayout;
