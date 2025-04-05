@@ -41,6 +41,7 @@ async function Manga({
             <Link
               href={`/manga/${data.id}/chapter/${chapter.id}/`}
               key={chapter.id}
+              prefetch={false}
             >
               <li
                 key={chapter.id}
