@@ -20,7 +20,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       <body className={inter.className}>
         <Header />
 
-        <SWRProvider>{children}</SWRProvider>
+        {children}
 
         <Toaster position="bottom-center" />
       </body>
