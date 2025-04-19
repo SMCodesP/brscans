@@ -1,6 +1,16 @@
-import Manhwa from '@/services/actions/Manhwa';
-import Image from 'next/image';
 import Link from 'next/link';
+
+import { ChapterDescription } from '@/components/chapter/description';
+import {
+  AnimatedTabs,
+  TabItem,
+  TabProvider,
+} from '@/components/ui/animated-tabs';
+import ContainerAnimation from '@/components/ui/container-animation';
+import { SplitTextPoor } from '@/components/ui/split-text-poor';
+import Manhwa from '@/services/actions/Manhwa';
+import { searchManga } from '@/services/anilist';
+import Image from 'next/image';
 
 async function Manga({
   params,
@@ -27,27 +37,32 @@ async function Manga({
             LEIA A {data?.title}
           </p>
           <h1 className="text-4xl font-bold">{data?.title}</h1>
-          <p>
-            <strong>Descrição:</strong> {data?.description}
-          </p>
+          <ChapterDescription manga={data} />
         </div>
       </div>
 
       <div className="mt-8">
         <h2 className="text-2xl font-bold">Capítulos</h2>
         <ul className="flex flex-wrap gap-4 mt-2">
-          {data?.chapters.map((chapter) => (
+          {data?.chapters.map((chapter, index) => (
             <Link
               href={`/manga/${data.id}/chapter/${chapter.id}/`}
               key={chapter.id}
               prefetch={false}
             >
-              <li
-                key={chapter.id}
-                className="text-center w-72 p-2 border border-primary/10 hover:bg-primary/10 hover:border-primary rounded-md transition-all"
+              <ContainerAnimation
+                delay={index * 0.01}
+                distance={[100, 0]}
               >
-                <p>{chapter.title}</p>
-              </li>
+                <li
+                  key={chapter.id}
+                  className="text-center w-72 p-2 border border-primary/10 hover:bg-primary/10 hover:border-primary rounded-md transition-all"
+                >
+                  <p className="!line-clamp-1 overflow-hidden text-ellipsis *:inline">
+                    {chapter.title}
+                  </p>
+                </li>
+              </ContainerAnimation>
             </Link>
           ))}
         </ul>
@@ -56,7 +71,7 @@ async function Manga({
   );
 }
 
-export const experimental_ppr = true;
-export const revalidate = 120;
+// export const experimental_ppr = true;
+export const revalidate = 36000;
 
 export default Manga;

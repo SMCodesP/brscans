@@ -1,4 +1,4 @@
-interface TChracter {
+interface TAnilistCharacter {
   id: number;
   name: {
     first: string;

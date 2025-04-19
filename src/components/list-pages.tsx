@@ -1,5 +1,6 @@
 import { Loader } from 'lucide-react';
 import { cookies } from 'next/headers';
+import Image from 'next/image';
 import { TabsCookies, TabsList, TabsTrigger } from './ui/tabs';
 
 async function ListPages({
@@ -30,12 +31,16 @@ async function ListPages({
       <div>
         {((!isTranslating && type === 'translated') ||
           type !== 'translated') &&
-          chapter?.pages?.map((page) => (
-            <img
+          chapter?.pages?.map((page, index) => (
+            <Image
               key={page.id}
               src={String((page.images as any)[type || 'original'])}
               alt=""
               className="w-full"
+              priority={index === 0}
+              width={1000}
+              height={1000}
+              unoptimized
             />
           ))}
         {chapter?.pages?.length === 0 && (

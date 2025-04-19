@@ -1,13 +1,11 @@
-import Link from 'next/link';
-
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import Chapter from '@/services/actions/Chapter';
-import Manhwa from '@/services/actions/Manhwa';
+import { Suspense } from 'react';
 
 import { ListPages } from '@/components/list-pages';
-import { Loader } from 'lucide-react';
-import { Suspense } from 'react';
+import { Button } from '@/components/ui/button';
+
+import { Link } from '@/components/ui/link';
+import Chapter from '@/services/actions/Chapter';
+import Manhwa from '@/services/actions/Manhwa';
 
 async function ChapterPage({
   params,
@@ -24,14 +22,20 @@ async function ChapterPage({
         </h2>
       </Link>
       <div className="flex justify-between w-full">
-        <Link href={`/manga/${id}/chapter/${data?.previous?.id}`}>
-          <Button>Anterior</Button>
+        <Link
+          href={`/manga/${id}/chapter/${data?.previous?.id}`}
+          disabled={!data?.previous}
+        >
+          <Button disabled={!data?.previous}>Anterior</Button>
         </Link>
         <h2 className="text-2xl text-neutral-500 font-semibold">
           {data?.title}
         </h2>
-        <Link href={`/manga/${id}/chapter/${data?.next?.id}`}>
-          <Button>Próximo</Button>
+        <Link
+          href={`/manga/${id}/chapter/${data?.next?.id}`}
+          disabled={!data?.next}
+        >
+          <Button disabled={!data?.next}>Próximo</Button>
         </Link>
       </div>
 
@@ -40,11 +44,17 @@ async function ChapterPage({
       </Suspense>
 
       <div className="flex justify-between w-full">
-        <Link href={`/manga/${id}/chapter/${data?.previous?.id}`}>
-          <Button>Anterior</Button>
+        <Link
+          href={`/manga/${id}/chapter/${data?.previous?.id}`}
+          disabled={!data?.previous}
+        >
+          <Button disabled={!data?.previous}>Anterior</Button>
         </Link>
-        <Link href={`/manga/${id}/chapter/${data?.next?.id}`}>
-          <Button>Próximo</Button>
+        <Link
+          href={`/manga/${id}/chapter/${data?.next?.id}`}
+          disabled={!data?.next}
+        >
+          <Button disabled={!data?.next}>Próximo</Button>
         </Link>
       </div>
     </div>
@@ -52,5 +62,6 @@ async function ChapterPage({
 }
 
 export const experimental_ppr = true;
+export const relative = 86400;
 
 export default ChapterPage;

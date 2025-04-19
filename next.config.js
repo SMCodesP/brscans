@@ -7,6 +7,11 @@ const nextConfig = {
   experimental: {
     ppr: 'incremental',
   },
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
 };
 
 module.exports = nextConfig;
