@@ -62,6 +62,6 @@ async function ChapterPage({
 }
 
 export const experimental_ppr = true;
-export const relative = 86400;
+export const revalidate = 86400;
 
 export default ChapterPage;
