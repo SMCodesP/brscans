@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { AnimatePresence, cubicBezier, motion } from 'framer-motion';
+import { AnimatePresence, cubicBezier, motion } from 'motion/react';
 import {
   ReactElement,
   ReactNode,
