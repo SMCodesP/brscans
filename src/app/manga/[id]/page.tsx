@@ -1,16 +1,10 @@
 import Link from 'next/link';
 
 import { ChapterDescription } from '@/components/chapter/description';
-import {
-  AnimatedTabs,
-  TabItem,
-  TabProvider,
-} from '@/components/ui/animated-tabs';
 import ContainerAnimation from '@/components/ui/container-animation';
-import { SplitTextPoor } from '@/components/ui/split-text-poor';
 import Manhwa from '@/services/actions/Manhwa';
-import { searchManga } from '@/services/anilist';
 import Image from 'next/image';
+import { Suspense } from 'react';
 
 async function Manga({
   params,
@@ -37,7 +31,9 @@ async function Manga({
             LEIA A {data?.title}
           </p>
           <h1 className="text-4xl font-bold">{data?.title}</h1>
-          <ChapterDescription manga={data} />
+          <Suspense>
+            <ChapterDescription manga={data} />
+          </Suspense>
         </div>
       </div>
 
@@ -71,7 +67,7 @@ async function Manga({
   );
 }
 
-// export const experimental_ppr = true;
+export const experimental_ppr = true;
 export const revalidate = 36000;
 
 export default Manga;

@@ -3,9 +3,6 @@ import { AnimatedTabs, TabProvider } from '../ui/animated-tabs';
 import ContainerAnimation from '../ui/container-animation';
 import { SplitTextPoor } from '../ui/split-text-poor';
 
-import { deepseek } from '@ai-sdk/deepseek';
-import { generateText } from 'ai';
-
 import { searchManga } from '@/services/anilist';
 import { translate } from '@/services/translate';
 
