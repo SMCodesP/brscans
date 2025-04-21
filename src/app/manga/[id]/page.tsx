@@ -1,10 +1,15 @@
+import {
+  Suspense,
+  unstable_ViewTransition as ViewTransition,
+} from 'react';
+
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { ChapterDescription } from '@/components/chapter/description';
 import ContainerAnimation from '@/components/ui/container-animation';
+
 import Manhwa from '@/services/actions/Manhwa';
-import Image from 'next/image';
-import { Suspense } from 'react';
 
 async function Manga({
   params,
@@ -17,20 +22,24 @@ async function Manga({
       <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
         {data?.thumbnail?.original && (
           <div className="relative aspect-7/10 w-64">
-            <Image
-              src={data?.thumbnail?.original}
-              alt="Image thumbnail manga"
-              className="w-full rounded-xl"
-              fill
-              unoptimized
-            />
+            <ViewTransition name={`manhwa-${data.id}`}>
+              <Image
+                src={data?.thumbnail?.original}
+                alt="Image thumbnail manga"
+                className="w-full rounded-xl"
+                fill
+                unoptimized
+              />
+            </ViewTransition>
           </div>
         )}
         <div className="p-2 flex flex-1 flex-col gap-3">
           <p className="tracking-widest font-medium text-sm uppercase">
             LEIA A {data?.title}
           </p>
-          <h1 className="text-4xl font-bold">{data?.title}</h1>
+          <ViewTransition name={`manhwa-title-${data.id}`}>
+            <h1 className="text-4xl font-bold">{data?.title}</h1>
+          </ViewTransition>
           <Suspense>
             <ChapterDescription manga={data} />
           </Suspense>

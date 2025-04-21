@@ -1,7 +1,11 @@
-import Welcome from '@/components/Welcome';
-import Manhwa from '@/services/actions/Manhwa';
+import { unstable_ViewTransition as ViewTransition } from 'react';
+
 import Image from 'next/image';
 import Link from 'next/link';
+
+import Welcome from '@/components/Welcome';
+
+import Manhwa from '@/services/actions/Manhwa';
 
 async function Home() {
   const latestManhwas = await new Manhwa().getLatest();
@@ -31,18 +35,22 @@ async function Home() {
             <Link href={`/manga/${manhwa.id}/`} key={manhwa.id}>
               <li className="flex flex-col gap-1 group w-full">
                 <div className="aspect-6/8 w-full overflow-hidden rounded-lg">
-                  <Image
-                    src={String(manhwa?.thumbnail?.original)}
-                    width={200}
-                    height={300}
-                    alt={manhwa.title}
-                    className="bg-gray-200 dark:bg-gray-800 group-hover:brightness-75 group-hover:scale-105 transition-all w-full duration-500"
-                    unoptimized
-                  />
+                  <ViewTransition name={`manhwa-${manhwa.id}`}>
+                    <Image
+                      src={String(manhwa?.thumbnail?.original)}
+                      width={200}
+                      height={300}
+                      alt={manhwa.title}
+                      className="bg-gray-200 dark:bg-gray-800 group-hover:brightness-75 group-hover:scale-105 transition-all w-full duration-500"
+                      unoptimized
+                    />
+                  </ViewTransition>
                 </div>
-                <h3 className="text-base text-slate-500 font-semibold">
-                  {manhwa.title}
-                </h3>
+                <ViewTransition name={`manhwa-title-${manhwa.id}`}>
+                  <h3 className="text-base text-slate-500 font-semibold">
+                    {manhwa.title}
+                  </h3>
+                </ViewTransition>
               </li>
             </Link>
           ))}

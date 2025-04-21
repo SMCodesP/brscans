@@ -39,9 +39,7 @@ async function ChapterPage({
         </Link>
       </div>
 
-      <Suspense>
-        <ListPages chapter={data} />
-      </Suspense>
+      <ListPages chapter={data} />
 
       <div className="flex justify-between w-full">
         <Link
