@@ -48,20 +48,22 @@ async function Manga({
 
       <div className="mt-8">
         <h2 className="text-2xl font-bold">Capítulos</h2>
-        <ul className="flex flex-wrap gap-4 mt-2">
+        <ul className="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-3 mt-2">
           {data?.chapters.map((chapter, index) => (
             <Link
               href={`/manga/${data.id}/chapter/${chapter.id}/`}
               key={chapter.id}
               prefetch={false}
+              className="w-full"
             >
               <ContainerAnimation
                 delay={index * 0.01}
                 distance={[100, 0]}
+                className="w-full"
               >
                 <li
                   key={chapter.id}
-                  className="text-center w-72 p-2 border border-primary/10 hover:bg-primary/10 hover:border-primary rounded-md transition-all"
+                  className="text-center w-full p-2 border border-primary/10 hover:bg-primary/10 hover:border-primary rounded-md transition-all"
                 >
                   <p className="!line-clamp-1 overflow-hidden text-ellipsis *:inline">
                     {chapter.title}
@@ -77,6 +79,6 @@ async function Manga({
 }
 
 export const experimental_ppr = true;
-export const revalidate = 36000;
+export const revalidate = 30;
 
 export default Manga;

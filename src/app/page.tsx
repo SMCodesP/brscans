@@ -30,7 +30,7 @@ async function Home() {
         <h2 className="text-2xl font-bold mb-4 text-center sm:text-start">
           Últimos mangas adicionados
         </h2>
-        <ul className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-6">
+        <ul className="grid grid-cols-[repeat(auto-fill,minmax(190px,1fr))] gap-2">
           {latestManhwas?.results?.map((manhwa) => (
             <Link href={`/manga/${manhwa.id}/`} key={manhwa.id}>
               <li className="flex flex-col gap-1 group w-full">
@@ -41,7 +41,7 @@ async function Home() {
                       width={200}
                       height={300}
                       alt={manhwa.title}
-                      className="bg-gray-200 dark:bg-gray-800 group-hover:brightness-75 group-hover:scale-105 transition-all w-full duration-500"
+                      className="bg-gray-200 dark:bg-gray-800 group-hover:brightness-75 group-hover:scale-105 transition-all w-full rounded-lg duration-500"
                       unoptimized
                     />
                   </ViewTransition>

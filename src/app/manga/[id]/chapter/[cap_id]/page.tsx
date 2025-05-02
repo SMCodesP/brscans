@@ -60,6 +60,6 @@ async function ChapterPage({
 }
 
 export const experimental_ppr = true;
-export const revalidate = 86400;
+export const revalidate = 30;
 
 export default ChapterPage;
