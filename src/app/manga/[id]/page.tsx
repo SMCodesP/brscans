@@ -11,10 +11,8 @@ import ContainerAnimation from '@/components/ui/container-animation';
 
 import Manhwa from '@/services/actions/Manhwa';
 
-async function Manga({
-  params,
-}: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+async function Manga({ params }: { params: { id: string } }) {
+  const { id } = params;
   const data = await new Manhwa().get(id);
 
   return (

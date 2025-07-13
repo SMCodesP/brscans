@@ -1,11 +1,33 @@
 import { unstable_ViewTransition as ViewTransition } from 'react';
 
+import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import Welcome from '@/components/Welcome';
 
 import Manhwa from '@/services/actions/Manhwa';
+
+export const metadata: Metadata = {
+  title: 'Página Inicial',
+  description:
+    'Seu portal para ler mangás e manhwas em português. Encontre lançamentos, clássicos e muito mais. Comece a ler agora!',
+  openGraph: {
+    title: 'Página Inicial',
+    url: '/',
+    description:
+      'Seu portal para ler mangás e manhwas em português. Encontre lançamentos, clássicos e muito mais. Comece a ler agora!',
+    locale: 'pt_BR',
+  },
+  twitter: {
+    title: 'Página Inicial',
+    description:
+      'Seu portal para ler mangás e manhwas em português. Encontre lançamentos, clássicos e muito mais. Comece a ler agora!',
+  },
+  alternates: {
+    canonical: '/',
+  },
+};
 
 async function Home() {
   const latestManhwas = await new Manhwa().getLatest();

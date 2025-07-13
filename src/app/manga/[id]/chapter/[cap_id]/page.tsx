@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Metadata } from 'next';
 
 import { ListPages } from '@/components/list-pages';
 import { Button } from '@/components/ui/button';
@@ -7,9 +7,38 @@ import { Link } from '@/components/ui/link';
 import Chapter from '@/services/actions/Chapter';
 import Manhwa from '@/services/actions/Manhwa';
 
+type Props = {
+  params: { cap_id: string; id: string };
+};
+
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata> {
+  const { cap_id, id } = params;
+  const chapter = await new Chapter().get(cap_id);
+  const manhwa = await new Manhwa().get(id);
+
+  if (!chapter || !manhwa) {
+    return {
+      title: 'Capítulo não encontrado',
+    };
+  }
+
+  const title = `${manhwa.title} - ${chapter.title}`;
+  const description = `Leia o ${chapter.title} de ${manhwa.title} online em português. Descubra o que acontece neste capítulo emocionante.`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `/manga/${id}/chapter/${cap_id}`,
+    },
+  };
+}
+
 async function ChapterPage({
   params,
-}: { params: Promise<{ cap_id: string; id: string }> }) {
+}: { params: { cap_id: string; id: string } }) {
   const { cap_id, id } = await params;
   const data = await new Chapter().get(cap_id);
   const manhwa = await new Manhwa().get(id);
