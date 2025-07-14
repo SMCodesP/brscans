@@ -2,13 +2,13 @@ import Manhwa from '@/services/actions/Manhwa';
 import { Metadata } from 'next';
 
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export async function generateMetadata({
   params,
 }: Props): Promise<Metadata> {
-  const { id } = params;
+  const { id } = await params;
   const data = await new Manhwa().get(id);
 
   if (!data) {

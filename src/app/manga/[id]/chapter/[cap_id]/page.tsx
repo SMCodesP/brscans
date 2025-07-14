@@ -8,13 +8,13 @@ import Chapter from '@/services/actions/Chapter';
 import Manhwa from '@/services/actions/Manhwa';
 
 type Props = {
-  params: { cap_id: string; id: string };
+  params: Promise<{ cap_id: string; id: string }>;
 };
 
 export async function generateMetadata({
   params,
 }: Props): Promise<Metadata> {
-  const { cap_id, id } = params;
+  const { cap_id, id } = await params;
   const chapter = await new Chapter().get(cap_id);
   const manhwa = await new Manhwa().get(id);
 
@@ -38,7 +38,7 @@ export async function generateMetadata({
 
 async function ChapterPage({
   params,
-}: { params: { cap_id: string; id: string } }) {
+}: { params: Promise<{ cap_id: string; id: string }> }) {
   const { cap_id, id } = await params;
   const data = await new Chapter().get(cap_id);
   const manhwa = await new Manhwa().get(id);

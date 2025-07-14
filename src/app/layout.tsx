@@ -4,7 +4,6 @@ import './globals.css';
 
 import Header from '@/components/Header';
 import { Toaster } from '@/components/ui/sonner';
-import { SWRProvider } from '@/providers/swr-provider';
 import { Inter } from 'next/font/google';
 
 const inter = Inter({ subsets: ['latin'] });
