@@ -1,10 +1,7 @@
 import ky from 'ky';
 
-const waifu = ky.extend({
-  prefixUrl: 'https://waifu.it/api/v4/',
-  headers: {
-    Authorization: process.env.WAIFU_IT,
-  },
+const yurippe = ky.extend({
+  prefixUrl: 'https://yurippe.vercel.app/api/',
 });
 
-export default waifu;
+export default yurippe;

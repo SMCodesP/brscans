@@ -52,7 +52,7 @@ const Welcome: React.FC = async () => {
           alt="Character"
         />
       </div>
-      <div className="absolute self-end right-0 top-0 h-full aspect-[3/4] hidden md:flex">
+      <div className="absolute self-end right-0 top-0 h-full aspect-square hidden md:flex">
         <Image
           src={data.image_anime}
           width={384}
