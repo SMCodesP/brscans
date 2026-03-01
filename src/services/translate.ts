@@ -1,14 +1,24 @@
-import { cache } from 'react';
+export async function translateQuote(quote: string): Promise<string> {
+  const res = await fetch(
+    'https://ds2api-blond.vercel.app/v1/chat/completions',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.DEEPSEEK_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'deepseek-chat',
+        messages: [
+          {
+            role: 'user',
+            content: `Traduza a seguinte frase para português brasileiro de forma natural e fluida. Retorne APENAS a tradução, sem explicações ou aspas:\n\n${quote}`,
+          },
+        ],
+      }),
+    }
+  );
 
-import { deepseek } from '@ai-sdk/deepseek';
-import { generateText } from 'ai';
-
-export const translate = cache(async (text: string) => {
-  const description = await generateText({
-    model: deepseek('deepseek-chat'),
-    prompt: `Translate the following text to Portuguese (WITHOUT COMMENTS OR ANOTHERS TEXT, BUT KEEP HTML TAGS AND STRUCTURE): ${text}`,
-    temperature: 1.3,
-  });
-
-  return description.text;
-});
+  const data = await res.json();
+  return data.choices[0].message.content.trim();
+}
