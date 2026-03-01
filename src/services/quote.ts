@@ -1,6 +1,4 @@
-'use server';
-
-import { cache } from 'react';
+import { unstable_cache } from 'next/cache';
 import anilist from './anilist';
 import { translateQuote } from './translate';
 import yurippe from './waifu';
@@ -114,4 +112,6 @@ async function getQuote(tries = 3, repeated = 0): Promise<TQuote> {
   }
 }
 
-export default cache(getQuote);
+export default unstable_cache(getQuote, ['quote'], {
+  revalidate: 300,
+});
