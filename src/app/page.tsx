@@ -10,7 +10,9 @@ import RecentChapters from '@/components/home/recent-chapters';
 import TopMangas from '@/components/home/top-mangas';
 import Welcome from '@/components/welcome';
 
+import { Button } from '@/components/ui/button';
 import Manhwa from '@/services/actions/Manhwa';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Página Inicial',
@@ -86,6 +88,11 @@ async function Home() {
               {mangas.slice(0, 12).map((manga) => (
                 <MangaCard key={manga.id} manga={manga} />
               ))}
+            </div>
+            <div className="flex justify-center mt-4">
+              <Button>
+                <Link href="/mangas">Ver todos os mangás</Link>
+              </Button>
             </div>
           </section>
         </div>
