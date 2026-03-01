@@ -3,12 +3,12 @@ import { Suspense } from 'react';
 
 import { Sparkles } from 'lucide-react';
 
-import Welcome from '@/components/welcome';
 import ContinueReading from '@/components/home/continue-reading';
 import HeroBanner from '@/components/home/hero-banner';
 import MangaCard from '@/components/home/manga-card';
 import RecentChapters from '@/components/home/recent-chapters';
 import TopMangas from '@/components/home/top-mangas';
+import Welcome from '@/components/welcome';
 
 import Manhwa from '@/services/actions/Manhwa';
 
@@ -36,17 +36,14 @@ export const metadata: Metadata = {
 async function Home() {
   const manhwaService = new Manhwa();
 
-  const latestManhwas = await manhwaService
-    .getLatest()
-    .catch(() => null);
-
-  const recentChapters = await manhwaService
-    .getRecentChapters(20)
-    .catch(() => [] as TRecentChapter[]);
-
-  const topMangas = await manhwaService
-    .getTopMangas(10)
-    .catch(() => [] as TManga[]);
+  const [latestManhwas, recentChapters, topMangas] =
+    await Promise.all([
+      manhwaService.getLatest().catch(() => null),
+      manhwaService
+        .getRecentChapters(20)
+        .catch(() => [] as TRecentChapter[]),
+      manhwaService.getTopMangas(10).catch(() => [] as TManga[]),
+    ]);
 
   const mangas = latestManhwas?.results || [];
 
