@@ -1,86 +1,164 @@
+'use client';
+
 import {
-  BookOpenText,
+  BookOpen,
   Heart,
   LogIn,
-  Plus,
-  ScrollText,
+  Menu,
+  Search,
+  X,
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import Link from 'next/link';
+import { useState } from 'react';
+
+const navLinks = [
+  { label: 'Início', href: '/' },
+  { label: 'Mangás', href: '/mangas' },
+  { label: 'Discord', href: 'https://discord.gg', external: true },
+];
 
 const Header: React.FC = () => {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
-    <header className="py-10 px-2 md:px-12">
-      <nav className="flex justify-between">
-        <Link href="/">
-          <h1 className="font-extrabold text-2xl uppercase">Logo</h1>
-        </Link>
-
-        <ul className="gap-6 text-slate-400 hidden sm:flex">
-          <Link href="/">
-            <li className="cursor-pointer transition-colors hover:text-slate-700">
-              Início
-            </li>
+    <>
+      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
+        <nav className="max-w-7xl mx-auto flex items-center justify-between h-16 px-4 sm:px-8">
+          {/* Logo */}
+          <Link
+            href="/"
+            className="flex items-center gap-2 flex-shrink-0"
+          >
+            <BookOpen className="w-6 h-6 text-primary" />
+            <span className="text-xl font-extrabold tracking-tight">
+              BR<span className="text-primary">Scans</span>
+            </span>
           </Link>
-          <li className="cursor-pointer transition-colors hover:text-slate-700">
-            Novos
-          </li>
-          <li className="cursor-pointer transition-colors hover:text-slate-700">
-            Popular
-          </li>
-          <li className="cursor-pointer transition-colors hover:text-slate-700">
-            Notícias
-          </li>
-          <li className="cursor-pointer transition-colors hover:text-slate-700">
-            Discord
-          </li>
-        </ul>
 
-        <div className="flex gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon">
-                <Plus className="w-4 h-4" />
+          {/* Desktop nav */}
+          <ul className="hidden md:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <li key={link.label}>
+                {link.external ? (
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link
+                    href={link.href}
+                    className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+
+          {/* Actions */}
+          <div className="flex items-center gap-2">
+            {/* Search hint */}
+            <Button
+              variant="outline"
+              className="hidden sm:flex items-center gap-2 px-3 bg-transparent border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent"
+            >
+              <Search className="w-4 h-4" />
+              <span className="text-xs">Buscar...</span>
+              <kbd className="ml-2 text-[10px] font-mono bg-muted px-1.5 py-0.5 rounded">
+                ⌘K
+              </kbd>
+            </Button>
+
+            <ThemeToggle />
+
+            <Button
+              variant="outline"
+              size="icon"
+              className="bg-transparent border-border/50 hover:bg-accent"
+            >
+              <Heart className="w-4 h-4" />
+            </Button>
+
+            <Button
+              variant="default"
+              className="hidden sm:flex items-center gap-2 px-4 bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+              <LogIn className="w-4 h-4" />
+              Entrar
+            </Button>
+
+            {/* Mobile menu toggle */}
+            <Button
+              variant="outline"
+              size="icon"
+              className="md:hidden bg-transparent border-border/50"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Menu"
+            >
+              {mobileOpen ? (
+                <X className="w-4 h-4" />
+              ) : (
+                <Menu className="w-4 h-4" />
+              )}
+            </Button>
+          </div>
+        </nav>
+      </header>
+
+      {/* Mobile drawer */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-40 md:hidden">
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setMobileOpen(false)}
+          />
+          <div className="absolute top-16 left-0 right-0 bg-background border-b border-border shadow-xl p-4 animate-in slide-in-from-top-2">
+            <ul className="flex flex-col gap-1">
+              {navLinks.map((link) => (
+                <li key={link.label}>
+                  {link.external ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="block px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-3 pt-3 border-t border-border">
+              <Button
+                variant="default"
+                className="w-full gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
+              >
+                <LogIn className="w-4 h-4" />
+                Entrar
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>Adicionar novo:</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <div className="text-slate-600">
-                <Link href="/manga">
-                  <DropdownMenuItem>
-                    <ScrollText className="w-4 h-4 mr-1.5" />
-                    Capítulo
-                  </DropdownMenuItem>
-                </Link>
-                <Link href="/manga">
-                  <DropdownMenuItem>
-                    <BookOpenText className="w-4 h-4 mr-1.5" />
-                    Manga
-                  </DropdownMenuItem>
-                </Link>
-              </div>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Button variant="outline" size="icon">
-            <Heart className="w-4 h-4" />
-          </Button>
-          <Button variant="outline" className="gap-2 px-3">
-            Entrar
-            <LogIn className="w-4 h-4" />
-          </Button>
+            </div>
+          </div>
         </div>
-      </nav>
-    </header>
+      )}
+    </>
   );
 };
 

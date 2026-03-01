@@ -2,8 +2,10 @@ import { Metadata } from 'next';
 
 import './globals.css';
 
+import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import { Toaster } from '@/components/ui/sonner';
+import { ThemeProvider } from '@/providers/theme-provider';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Inter } from 'next/font/google';
@@ -30,13 +32,17 @@ export const metadata: Metadata = {
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-br">
+    <html lang="pt-br" className="dark" suppressHydrationWarning>
       <body className={inter.className}>
-        <Header />
+        <ThemeProvider>
+          <Header />
 
-        {children}
+          <div className="min-h-[calc(100vh-160px)]">{children}</div>
 
-        <Toaster position="bottom-center" />
+          <Footer />
+
+          <Toaster position="bottom-center" />
+        </ThemeProvider>
         <Analytics />
         <SpeedInsights />
       </body>

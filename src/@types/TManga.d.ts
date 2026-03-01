@@ -14,4 +14,5 @@ interface TManga {
   slug: null;
   hash_slug: null;
   chapters?: TChapter[];
+  latest_chapters?: TChapter[];
 }
