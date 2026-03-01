@@ -2,14 +2,16 @@ import { Metadata } from 'next';
 
 import './globals.css';
 
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
+import Footer from '@/components/footer';
+import Header from '@/components/header';
 import { Toaster } from '@/components/ui/sonner';
 import { AuthProvider } from '@/providers/auth-provider';
 import { ThemeProvider } from '@/providers/theme-provider';
+import { fetcher } from '@/services/api-server';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Inter } from 'next/font/google';
+import { cookies } from 'next/headers';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -31,12 +33,19 @@ export const metadata: Metadata = {
   },
 };
 
-function RootLayout({ children }: { children: React.ReactNode }) {
+async function RootLayout({
+  children,
+}: { children: React.ReactNode }) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('auth_token')?.value || null;
+
+  let user = await fetcher<any>('auth/me').catch(() => null);
+
   return (
     <html lang="pt-br" className="dark" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider>
-          <AuthProvider>
+          <AuthProvider initialUser={user} initialToken={token}>
             <Header />
 
             <div className="min-h-[calc(100vh-160px)]">
@@ -54,7 +63,5 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     </html>
   );
 }
-
-export const experimental_ppr = true;
 
 export default RootLayout;

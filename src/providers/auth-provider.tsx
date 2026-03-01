@@ -1,10 +1,12 @@
 'use client';
 
+import { api } from '@/services/api';
+import { deleteCookie, setCookie } from 'cookies-next';
+import { useRouter } from 'next/navigation';
 import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useState,
 } from 'react';
 
@@ -48,109 +50,100 @@ const AuthContext = createContext<AuthContextType>({
   logout: () => {},
 });
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
 export function AuthProvider({
   children,
-}: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  initialUser = null,
+  initialToken = null,
+}: {
+  children: React.ReactNode;
+  initialUser?: User | null;
+  initialToken?: string | null;
+}) {
+  const [user, setUser] = useState<User | null>(initialUser);
+  const [token, setToken] = useState<string | null>(initialToken);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const saveAuth = useCallback((token: string, user: User) => {
-    setToken(token);
-    setUser(user);
-    localStorage.setItem('auth_token', token);
-  }, []);
+  const saveAuth = useCallback(
+    (newToken: string, newUser: User) => {
+      setToken(newToken);
+      setUser(newUser);
+      setCookie('auth_token', newToken, {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      });
+      router.refresh();
+    },
+    [router]
+  );
 
   const logout = useCallback(() => {
     setToken(null);
     setUser(null);
-    localStorage.removeItem('auth_token');
-  }, []);
-
-  // Load token on mount
-  useEffect(() => {
-    const stored = localStorage.getItem('auth_token');
-    if (stored) {
-      setToken(stored);
-      fetch(`${API_URL}/auth/me/`, {
-        headers: { Authorization: `Token ${stored}` },
-      })
-        .then((res) => {
-          if (!res.ok) throw new Error();
-          return res.json();
-        })
-        .then((data) => setUser(data))
-        .catch(() => {
-          localStorage.removeItem('auth_token');
-        })
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
-  }, []);
+    deleteCookie('auth_token', { path: '/' });
+    router.refresh();
+  }, [router]);
 
   const login = useCallback(
     async (username: string, password: string) => {
-      const res = await fetch(`${API_URL}/auth/login/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || 'Falha no login.');
+      try {
+        const data = await api
+          .post('auth/login/', {
+            json: { username, password },
+          })
+          .json<{ token: string; user: User }>();
+        saveAuth(data.token, data.user);
+      } catch (err: any) {
+        const errorData = await err.response
+          ?.json()
+          .catch(() => ({}));
+        throw new Error(errorData?.error || 'Falha no login.');
       }
-
-      const data = await res.json();
-      saveAuth(data.token, data.user);
     },
     [saveAuth]
   );
 
   const register = useCallback(
     async (username: string, password: string, email?: string) => {
-      const res = await fetch(`${API_URL}/auth/register/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password, email }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
+      try {
+        const data = await api
+          .post('auth/register/', {
+            json: { username, password, email },
+          })
+          .json<{ token: string; user: User }>();
+        saveAuth(data.token, data.user);
+      } catch (err: any) {
+        const errorData = await err.response
+          ?.json()
+          .catch(() => ({}));
         const msg =
-          data.username?.[0] ||
-          data.password?.[0] ||
-          data.error ||
+          errorData?.username?.[0] ||
+          errorData?.password?.[0] ||
+          errorData?.error ||
           'Falha no registro.';
         throw new Error(msg);
       }
-
-      const data = await res.json();
-      saveAuth(data.token, data.user);
     },
     [saveAuth]
   );
 
   const loginWithDiscord = useCallback(
     async (code: string, redirectUri: string) => {
-      const res = await fetch(`${API_URL}/auth/discord/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code, redirect_uri: redirectUri }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
+      try {
+        const data = await api
+          .post('auth/discord/', {
+            json: { code, redirect_uri: redirectUri },
+          })
+          .json<{ token: string; user: User }>();
+        saveAuth(data.token, data.user);
+      } catch (err: any) {
+        const errorData = await err.response
+          ?.json()
+          .catch(() => ({}));
         throw new Error(
-          data.error || 'Falha na autenticação Discord.'
+          errorData?.error || 'Falha na autenticação Discord.'
         );
       }
-
-      const data = await res.json();
-      saveAuth(data.token, data.user);
     },
     [saveAuth]
   );

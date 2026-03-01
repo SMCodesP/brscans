@@ -3,11 +3,12 @@ import { Suspense } from 'react';
 
 import { Sparkles } from 'lucide-react';
 
-import Welcome from '@/components/Welcome';
-import HeroBanner from '@/components/home/HeroBanner';
-import MangaCard from '@/components/home/MangaCard';
-import RecentChapters from '@/components/home/RecentChapters';
-import TopMangas from '@/components/home/TopMangas';
+import Welcome from '@/components/welcome';
+import ContinueReading from '@/components/home/continue-reading';
+import HeroBanner from '@/components/home/hero-banner';
+import MangaCard from '@/components/home/manga-card';
+import RecentChapters from '@/components/home/recent-chapters';
+import TopMangas from '@/components/home/top-mangas';
 
 import Manhwa from '@/services/actions/Manhwa';
 
@@ -74,18 +75,23 @@ async function Home() {
 
       {/* Content grid: Top Mangas + Latest Added */}
       <div className="mt-12 grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-10">
-        {/* Latest Mangas */}
-        <section>
-          <h2 className="section-header flex items-center gap-2 mb-5">
-            <Sparkles className="w-5 h-5 text-primary" />
-            Lançamento
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {mangas.slice(0, 12).map((manga) => (
-              <MangaCard key={manga.id} manga={manga} />
-            ))}
-          </div>
-        </section>
+        <div className="flex flex-col min-w-0">
+          {/* Continue Reading */}
+          <ContinueReading />
+
+          {/* Latest Mangas */}
+          <section>
+            <h2 className="section-header flex items-center gap-2 mb-5">
+              <Sparkles className="w-5 h-5 text-primary" />
+              Lançamento
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {mangas.slice(0, 12).map((manga) => (
+                <MangaCard key={manga.id} manga={manga} />
+              ))}
+            </div>
+          </section>
+        </div>
 
         {/* Top Mangas sidebar */}
         {topMangas && topMangas.length > 0 && (

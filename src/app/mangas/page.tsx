@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 import { BookOpen } from 'lucide-react';
 
-import MangaCard from '@/components/home/MangaCard';
+import MangaCard from '@/components/home/manga-card';
 import Manhwa from '@/services/actions/Manhwa';
 
 export const metadata: Metadata = {

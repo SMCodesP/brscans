@@ -1,44 +1,15 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-
+import MangaCard from '@/components/home/manga-card';
 import { BookOpen, Heart } from 'lucide-react';
+import { cookies } from 'next/headers';
 
-import MangaCard from '@/components/home/MangaCard';
-import { useAuth } from '@/providers/auth-provider';
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+export default async function FavoritosPage() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('auth_token')?.value;
 
-export default function FavoritosPage() {
-  const { user, token, loading: authLoading } = useAuth();
-  const [mangas, setMangas] = useState<TManga[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (authLoading) return;
-    if (!user || !token) {
-      setLoading(false);
-      return;
-    }
-
-    fetch(`${API_URL}/favorites/`, {
-      headers: { Authorization: `Token ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => setMangas(data))
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, [user, token, authLoading]);
-
-  if (authLoading || loading) {
-    return (
-      <main className="flex items-center justify-center min-h-[calc(100vh-200px)]">
-        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-      </main>
-    );
-  }
-
-  if (!user) {
+  if (!token) {
     return (
       <main className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] px-4">
         <Heart className="w-12 h-12 text-muted-foreground/50 mb-4" />
@@ -47,6 +18,19 @@ export default function FavoritosPage() {
         </p>
       </main>
     );
+  }
+
+  let mangas: any[] = [];
+  try {
+    const res = await fetch(`${API_URL}/favorites/`, {
+      headers: { Authorization: `Token ${token}` },
+      cache: 'no-store', // Favorites are highly dynamic per user
+    });
+    if (res.ok) {
+      mangas = await res.json();
+    }
+  } catch (error) {
+    console.error('Failed to fetch favorites:', error);
   }
 
   return (

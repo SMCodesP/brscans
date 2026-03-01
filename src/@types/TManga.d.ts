@@ -8,7 +8,7 @@ interface TManga {
   hash_external_id: string;
   source: string;
   identifier: string;
-  genres: [];
+  genres: TGenre[];
   chapters: TChapter[];
   author: null;
   slug: null;

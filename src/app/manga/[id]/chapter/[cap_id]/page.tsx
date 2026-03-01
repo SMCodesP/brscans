@@ -3,6 +3,8 @@ import { Metadata } from 'next';
 import { ListPages } from '@/components/list-pages';
 import { Button } from '@/components/ui/button';
 
+import { Comments } from '@/components/chapter/comments';
+import { ProgressTracker } from '@/components/chapter/progress-tracker';
 import { Link } from '@/components/ui/link';
 import Chapter from '@/services/actions/Chapter';
 import Manhwa from '@/services/actions/Manhwa';
@@ -15,8 +17,10 @@ export async function generateMetadata({
   params,
 }: Props): Promise<Metadata> {
   const { cap_id, id } = await params;
-  const chapter = await new Chapter().get(cap_id);
-  const manhwa = await new Manhwa().get(id);
+  const [chapter, manhwa] = await Promise.all([
+    new Chapter().get(cap_id),
+    new Manhwa().get(id),
+  ]);
 
   if (!chapter || !manhwa) {
     return {
@@ -40,8 +44,10 @@ async function ChapterPage({
   params,
 }: { params: Promise<{ cap_id: string; id: string }> }) {
   const { cap_id, id } = await params;
-  const data = await new Chapter().get(cap_id);
-  const manhwa = await new Manhwa().get(id);
+  const [data, manhwa] = await Promise.all([
+    new Chapter().get(cap_id),
+    new Manhwa().get(id),
+  ]);
 
   return (
     <div className="flex flex-col gap-8 py-4 items-center max-w-[800px] mx-auto">
@@ -69,6 +75,13 @@ async function ChapterPage({
       </div>
 
       <ListPages chapter={data} />
+      {data && manhwa && (
+        <ProgressTracker
+          manhwaId={manhwa.id}
+          chapterId={data.id}
+          totalPages={data.pages?.length || 0}
+        />
+      )}
 
       <div className="flex justify-between w-full">
         <Link
@@ -84,11 +97,14 @@ async function ChapterPage({
           <Button disabled={!data?.next}>Próximo</Button>
         </Link>
       </div>
+
+      <div className="w-full mt-12 border-t border-border/50 pt-8">
+        <Comments chapterId={data.id} />
+      </div>
     </div>
   );
 }
 
-export const experimental_ppr = true;
 export const revalidate = 30;
 
 export default ChapterPage;

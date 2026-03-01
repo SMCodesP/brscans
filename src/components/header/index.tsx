@@ -13,6 +13,8 @@ import {
   X,
 } from 'lucide-react';
 
+import { NotificationBell } from '@/components/notifications/notification-bell';
+import { CommandPalette } from '@/components/search/command-palette';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useAuth } from '@/providers/auth-provider';
@@ -28,7 +30,20 @@ const Header: React.FC = () => {
   const { user, loading, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Toggle Command Palette with Ctrl+K
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setSearchOpen((open) => !open);
+      }
+    };
+    document.addEventListener('keydown', down);
+    return () => document.removeEventListener('keydown', down);
+  }, []);
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -89,6 +104,7 @@ const Header: React.FC = () => {
             {/* Search hint */}
             <Button
               variant="outline"
+              onClick={() => setSearchOpen(true)}
               className="hidden sm:flex items-center gap-2 px-3 bg-transparent border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent"
             >
               <Search className="w-4 h-4" />
@@ -98,7 +114,11 @@ const Header: React.FC = () => {
               </kbd>
             </Button>
 
+            {/* Theme Toggle */}
             <ThemeToggle />
+
+            {/* Notifications */}
+            {user && !loading && <NotificationBell />}
 
             {/* Favorites */}
             {user && (
@@ -268,6 +288,8 @@ const Header: React.FC = () => {
           </div>
         </div>
       )}
+
+      <CommandPalette open={searchOpen} setOpen={setSearchOpen} />
     </>
   );
 };
