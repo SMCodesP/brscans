@@ -5,6 +5,7 @@ import './globals.css';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import { Toaster } from '@/components/ui/sonner';
+import { AuthProvider } from '@/providers/auth-provider';
 import { ThemeProvider } from '@/providers/theme-provider';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -35,13 +36,17 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     <html lang="pt-br" className="dark" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider>
-          <Header />
+          <AuthProvider>
+            <Header />
 
-          <div className="min-h-[calc(100vh-160px)]">{children}</div>
+            <div className="min-h-[calc(100vh-160px)]">
+              {children}
+            </div>
 
-          <Footer />
+            <Footer />
 
-          <Toaster position="bottom-center" />
+            <Toaster position="bottom-center" />
+          </AuthProvider>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />
