@@ -25,7 +25,7 @@ export async function generateMetadata({
     'manhwa',
     'ler online',
     'capítulos',
-    ...(data.genres || []),
+    ...(data.genres?.map((genre) => genre.name) || []),
   ];
 
   const imageUrl =

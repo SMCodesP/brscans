@@ -4,9 +4,6 @@ const nextConfig = {
   images: {
     domains: ['s4.anilist.co'],
   },
-  experimental: {
-    ppr: 'incremental',
-  },
   logging: {
     fetches: {
       fullUrl: true,

@@ -14,33 +14,33 @@ const Welcome: React.FC = async () => {
   return (
     <div
       className={cn(
-        'flex relative w-full min-h-96 rounded-lg md:bg-transparent!'
+        'flex relative w-full min-h-72 sm:min-h-80 rounded-2xl overflow-hidden md:bg-transparent!'
       )}
       style={{
-        boxShadow: `0 0 10px 0 ${data.color_anime}`,
+        boxShadow: `0 0 40px 0 ${transparentize(0.7, data.color_anime)}`,
         background: data.color_anime,
       }}
     >
       <div
-        className="flex flex-col sm:flex-row pt-20 pl-16 pb-8 pr-8 gap-4 sm:gap-4 md:gap-8 lg:gap-16 xl:gap-24 w-full z-10 justify-between rounded-lg"
+        className="flex flex-col sm:flex-row pt-16 pl-8 sm:pl-12 pb-8 pr-8 gap-4 sm:gap-4 md:gap-8 lg:gap-16 xl:gap-24 w-full z-10 justify-between rounded-2xl"
         style={{
-          background: `linear-gradient(to right, ${data.color_anime} 80%, ${transparentize(0.5, data.color_anime)})`,
+          background: `linear-gradient(to right, ${data.color_anime} 75%, ${transparentize(0.6, data.color_anime)})`,
         }}
       >
         <div
           className={cn(isLight ? 'text-slate-100' : 'text-gray-800')}
         >
           <div className="relative">
-            <Quote className="absolute -top-8 -start-8 size-16 text-gray-100/20 dark:text-neutral-700 rotate-180 stroke-[3px]" />
+            <Quote className="absolute -top-6 -start-6 size-12 text-white/15 rotate-180 stroke-[3px]" />
             <div className="relative z-10">
-              <q className="font-semibold italic text-xl">
+              <q className="font-semibold italic text-lg sm:text-xl leading-relaxed">
                 {data.quote}
               </q>
             </div>
           </div>
-          <div className="mt-8">
-            <p className="font-medium text-lg italic">
-              - {data.character}
+          <div className="mt-6">
+            <p className="font-medium text-base italic opacity-80">
+              — {data.character}
             </p>
           </div>
         </div>
@@ -48,16 +48,16 @@ const Welcome: React.FC = async () => {
           src={data.image_character}
           width={128}
           height={128}
-          className="rounded-lg self-center w-1/2 md:self-end md:w-32"
+          className="rounded-xl self-center w-1/3 sm:w-28 md:self-end md:w-32"
           alt="Character"
         />
       </div>
-      <div className="absolute self-end right-0 top-0 h-full aspect-6/8 hidden md:flex">
+      <div className="absolute self-end right-0 top-0 h-full aspect-[3/4] hidden md:flex">
         <Image
           src={data.image_anime}
           width={384}
           height={384}
-          className="h-full w-full object-cover rounded-md"
+          className="h-full w-full object-cover rounded-2xl"
           alt="Anime"
         />
       </div>

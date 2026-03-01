@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @plugin 'tailwindcss-animate';
 
@@ -68,14 +68,6 @@
   }
 }
 
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
 @layer base {
   *,
   ::after,
@@ -86,73 +78,60 @@
   }
 }
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-  }
+/* ==========================================
+   COLOR VARIABLES — outside @layer for proper specificity
+   ========================================== */
+:root {
+  --background: 220 15% 96%;
+  --foreground: 224 30% 12%;
+  --card: 0 0% 100%;
+  --card-foreground: 224 30% 12%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 224 30% 12%;
+  --primary: 262 83% 58%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 220 14% 92%;
+  --secondary-foreground: 224 30% 12%;
+  --muted: 220 14% 92%;
+  --muted-foreground: 220 10% 46%;
+  --accent: 262 60% 94%;
+  --accent-foreground: 262 83% 40%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 220 14% 89%;
+  --input: 220 14% 89%;
+  --ring: 262 83% 58%;
+  --radius: 0.625rem;
 }
 
+.dark {
+  --background: 240 6% 10%;
+  --foreground: 0 0% 93%;
+  --card: 240 5% 13%;
+  --card-foreground: 0 0% 93%;
+  --popover: 240 5% 13%;
+  --popover-foreground: 0 0% 93%;
+  --primary: 262 83% 62%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 240 4% 18%;
+  --secondary-foreground: 0 0% 88%;
+  --muted: 240 4% 18%;
+  --muted-foreground: 0 0% 55%;
+  --accent: 262 30% 22%;
+  --accent-foreground: 262 80% 80%;
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 240 4% 20%;
+  --input: 240 4% 20%;
+  --ring: 262 83% 62%;
+}
 
+/* ==========================================
+   BASE STYLES
+   ========================================== */
 @layer base {
   * {
     @apply border-border;
-  }
-
-  body {
-    background-color: #99fffc22;
-
-    @apply text-slate-600;
   }
 
   html,
@@ -160,29 +139,39 @@
     margin: 0;
     padding: 0;
     height: 100%;
-    /* Ensures body expands to full viewport height */
   }
 
-  body::before {
-    display: block;
-    position: fixed;
-    /* Fixed ensures it covers the viewport even during scrolling */
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    /* Covers the full height of the body or viewport */
-    content: "";
-    background-image:
-      radial-gradient(at 43% 87%, hsla(209, 79%, 67%, 1) 0px, transparent 50%),
-      radial-gradient(at 2% 48%, hsla(186, 95%, 49%, 1) 0px, transparent 50%),
-      radial-gradient(at 29% 7%, hsla(182, 76%, 71%, 1) 0px, transparent 50%);
-    opacity: 0.1;
-    z-index: -1;
-    /* Remains behind other content */
+  body {
+    @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
 }
 
 button {
   cursor: pointer;
+}
+
+/* Section header utility */
+@utility section-header {
+  @apply text-2xl font-bold tracking-tight;
 }

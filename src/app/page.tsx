@@ -1,10 +1,14 @@
-import { unstable_ViewTransition as ViewTransition } from 'react';
-
 import { Metadata } from 'next';
-import Image from 'next/image';
-import Link from 'next/link';
+import { Suspense } from 'react';
 
-import Welcome from '@/components/Welcome';
+import { Sparkles } from 'lucide-react';
+
+import Welcome from '@/components/welcome';
+import ContinueReading from '@/components/home/continue-reading';
+import HeroBanner from '@/components/home/hero-banner';
+import MangaCard from '@/components/home/manga-card';
+import RecentChapters from '@/components/home/recent-chapters';
+import TopMangas from '@/components/home/top-mangas';
 
 import Manhwa from '@/services/actions/Manhwa';
 
@@ -30,54 +34,79 @@ export const metadata: Metadata = {
 };
 
 async function Home() {
-  const latestManhwas = await new Manhwa().getLatest();
+  const manhwaService = new Manhwa();
+
+  const latestManhwas = await manhwaService
+    .getLatest()
+    .catch(() => null);
+
+  const recentChapters = await manhwaService
+    .getRecentChapters(20)
+    .catch(() => [] as TRecentChapter[]);
+
+  const topMangas = await manhwaService
+    .getTopMangas(10)
+    .catch(() => [] as TManga[]);
+
+  const mangas = latestManhwas?.results || [];
 
   return (
-    <main className="px-2 sm:px-12">
-      <div className="grid grid-cols-3 gap-12">
-        <div className="col-span-3 sm:col-span-2">
+    <main className="max-w-7xl mx-auto px-4 sm:px-8 pb-16">
+      {/* Quote Banner */}
+      <section className="mt-6">
+        <Suspense>
           <Welcome />
+        </Suspense>
+      </section>
+
+      {/* Hero Banner */}
+      {mangas.length > 0 && (
+        <section className="mt-8">
+          <HeroBanner mangas={mangas} />
+        </section>
+      )}
+
+      {/* Recent Chapters */}
+      {recentChapters && recentChapters.length > 0 && (
+        <section className="mt-12">
+          <RecentChapters chapters={recentChapters} />
+        </section>
+      )}
+
+      {/* Content grid: Top Mangas + Latest Added */}
+      <div className="mt-12 grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-10">
+        <div className="flex flex-col min-w-0">
+          {/* Continue Reading */}
+          <ContinueReading />
+
+          {/* Latest Mangas */}
+          <section>
+            <h2 className="section-header flex items-center gap-2 mb-5">
+              <Sparkles className="w-5 h-5 text-primary" />
+              Lançamento
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {mangas.slice(0, 12).map((manga) => (
+                <MangaCard key={manga.id} manga={manga} />
+              ))}
+            </div>
+          </section>
         </div>
-        {/* <div>
-          <h2 className="text-2xl font-bold mb-4">Últimos lidos</h2>
-          <ul>
-            <li>
 
-            </li>
-          </ul>
-        </div> */}
+        {/* Top Mangas sidebar */}
+        {topMangas && topMangas.length > 0 && (
+          <aside className="hidden lg:block">
+            <TopMangas mangas={topMangas} />
+          </aside>
+        )}
       </div>
 
-      <div className="mt-12">
-        <h2 className="text-2xl font-bold mb-4 text-center sm:text-start">
-          Últimos mangas adicionados
-        </h2>
-        <ul className="grid grid-cols-[repeat(auto-fill,minmax(190px,1fr))] gap-2">
-          {latestManhwas?.results?.map((manhwa) => (
-            <Link href={`/manga/${manhwa.id}/`} key={manhwa.id}>
-              <li className="flex flex-col gap-1 group w-full">
-                <div className="aspect-6/8 w-full overflow-hidden rounded-lg">
-                  <ViewTransition name={`manhwa-${manhwa.id}`}>
-                    <Image
-                      src={String(manhwa?.thumbnail?.original)}
-                      width={200}
-                      height={300}
-                      alt={manhwa.title}
-                      className="bg-gray-200 dark:bg-gray-800 group-hover:brightness-75 group-hover:scale-105 transition-all w-full rounded-lg duration-500"
-                      unoptimized
-                    />
-                  </ViewTransition>
-                </div>
-                <ViewTransition name={`manhwa-title-${manhwa.id}`}>
-                  <h3 className="text-base text-slate-500 font-semibold">
-                    {manhwa.title}
-                  </h3>
-                </ViewTransition>
-              </li>
-            </Link>
-          ))}
-        </ul>
-      </div>
+      {/* Top Mangas mobile (below content) */}
+      {topMangas && topMangas.length > 0 && (
+        <section className="mt-12 lg:hidden">
+          <TopMangas mangas={topMangas} />
+        </section>
+      )}
     </main>
   );
 }

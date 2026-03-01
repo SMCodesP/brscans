@@ -34,9 +34,11 @@ async function ListPages({
           chapter?.pages?.map((page, index) => (
             <Image
               key={page.id}
+              id={`page-${index + 1}`}
+              data-page-index={index + 1}
               src={String((page.images as any)[type || 'original'])}
-              alt=""
-              className="w-full"
+              alt={`Página ${index + 1}`}
+              className="w-full chapter-page"
               priority={index === 0}
               width={1000}
               height={1000}
