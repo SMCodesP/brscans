@@ -57,6 +57,12 @@ async function Manga({
             <ViewTransition name={`manhwa-title-${data.id}`}>
               <h1 className="text-4xl font-bold">{data?.title}</h1>
             </ViewTransition>
+            {data?.original_title &&
+              data.original_title !== data.title && (
+                <p className="text-lg text-foreground/50 font-medium -mt-1">
+                  {data.original_title}
+                </p>
+              )}
 
             {/* Genre Pills */}
             {data?.genres && data.genres.length > 0 && (
