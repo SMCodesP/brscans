@@ -1,6 +1,7 @@
 import { Loader } from 'lucide-react';
 import { cookies } from 'next/headers';
 import Image from 'next/image';
+import { MobileStickyReveal } from './ui/mobile-sticky-reveal';
 import { TabsCookies, TabsList, TabsTrigger } from './ui/tabs';
 
 async function ListPages({
@@ -20,14 +21,16 @@ async function ListPages({
       className="relative flex flex-col"
       value={type}
     >
-      <TabsList className="sticky top-4 w-full">
-        <TabsTrigger className="flex-1" value="original">
-          Original
-        </TabsTrigger>
-        <TabsTrigger className="flex-1" value="translated">
-          {isTranslating ? 'Traduzindo...' : 'Português (Brazil)'}
-        </TabsTrigger>
-      </TabsList>
+      <MobileStickyReveal className="top-4">
+        <TabsList className="w-full">
+          <TabsTrigger className="flex-1" value="original">
+            Original
+          </TabsTrigger>
+          <TabsTrigger className="flex-1" value="translated">
+            {isTranslating ? 'Traduzindo...' : 'Português (Brazil)'}
+          </TabsTrigger>
+        </TabsList>
+      </MobileStickyReveal>
       <div>
         {((!isTranslating && type === 'translated') ||
           type !== 'translated') &&

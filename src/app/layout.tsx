@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import { Metadata, Viewport } from 'next';
 
 import './globals.css';
 
@@ -31,6 +31,12 @@ export const metadata: Metadata = {
     locale: 'pt_BR',
     type: 'website',
   },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
 };
 
 async function RootLayout({
