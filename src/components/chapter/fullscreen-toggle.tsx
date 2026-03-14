@@ -2,13 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Maximize, Minimize } from 'lucide-react';
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const AUTO_FULLSCREEN_KEY = 'brscans_auto_fullscreen';
 
@@ -17,42 +11,74 @@ function FullscreenToggle() {
   const [isSupported, setIsSupported] = useState(false);
   const [isControlVisible, setIsControlVisible] = useState(true);
   const hideTimer = useRef<number | null>(null);
-  const pointerStartX = useRef(0);
-  const pointerStartY = useRef(0);
 
-  const rootElement = useMemo(
-    () => document.documentElement as HTMLElement,
-    []
-  );
+  const getFullscreenElement = useCallback(() => {
+    const webkitFullscreenElement = (
+      document as Document & {
+        webkitFullscreenElement?: Element | null;
+      }
+    ).webkitFullscreenElement;
 
-  const updateFullscreenState = useCallback(() => {
-    setIsFullscreen(Boolean(document.fullscreenElement));
+    return document.fullscreenElement || webkitFullscreenElement;
   }, []);
 
+  const canRequestFullscreen = useCallback(() => {
+    const root = document.documentElement as HTMLElement & {
+      webkitRequestFullscreen?: () => Promise<void> | void;
+    };
+
+    return Boolean(
+      root.requestFullscreen || root.webkitRequestFullscreen
+    );
+  }, []);
+
+  const updateFullscreenState = useCallback(() => {
+    setIsFullscreen(Boolean(getFullscreenElement()));
+  }, [getFullscreenElement]);
+
   const requestFullscreen = useCallback(async () => {
-    if (!document.fullscreenEnabled || document.fullscreenElement) {
+    const root = document.documentElement as HTMLElement & {
+      webkitRequestFullscreen?: () => Promise<void> | void;
+    };
+
+    if (getFullscreenElement()) {
       return;
     }
 
     try {
-      await rootElement.requestFullscreen();
+      if (root.requestFullscreen) {
+        await root.requestFullscreen();
+      } else if (root.webkitRequestFullscreen) {
+        await root.webkitRequestFullscreen();
+      } else {
+        return;
+      }
+
       localStorage.setItem(AUTO_FULLSCREEN_KEY, '1');
     } catch {
       // Ignore permission/user-gesture rejections.
     }
-  }, [rootElement]);
+  }, [getFullscreenElement]);
 
   const exitFullscreen = useCallback(async () => {
-    if (!document.fullscreenElement) {
+    const webkitDocument = document as Document & {
+      webkitExitFullscreen?: () => Promise<void> | void;
+    };
+
+    if (!getFullscreenElement()) {
       return;
     }
 
     try {
-      await document.exitFullscreen();
+      if (document.exitFullscreen) {
+        await document.exitFullscreen();
+      } else if (webkitDocument.webkitExitFullscreen) {
+        await webkitDocument.webkitExitFullscreen();
+      }
     } catch {
       // Ignore failures from unsupported environments.
     }
-  }, []);
+  }, [getFullscreenElement]);
 
   const toggleFullscreen = useCallback(() => {
     if (isFullscreen) {
@@ -79,7 +105,7 @@ function FullscreenToggle() {
   }, [scheduleHide]);
 
   useEffect(() => {
-    const supported = Boolean(document.fullscreenEnabled);
+    const supported = canRequestFullscreen();
     setIsSupported(supported);
     updateFullscreenState();
 
@@ -91,14 +117,22 @@ function FullscreenToggle() {
       'fullscreenchange',
       updateFullscreenState
     );
+    document.addEventListener(
+      'webkitfullscreenchange',
+      updateFullscreenState as EventListener
+    );
 
     return () => {
       document.removeEventListener(
         'fullscreenchange',
         updateFullscreenState
       );
+      document.removeEventListener(
+        'webkitfullscreenchange',
+        updateFullscreenState as EventListener
+      );
     };
-  }, [updateFullscreenState]);
+  }, [canRequestFullscreen, updateFullscreenState]);
 
   useEffect(() => {
     if (!isSupported) {
@@ -107,29 +141,18 @@ function FullscreenToggle() {
 
     revealControl();
 
-    const onPointerDown = (event: PointerEvent) => {
-      pointerStartX.current = event.clientX;
-      pointerStartY.current = event.clientY;
-    };
-
-    const onPointerUp = (event: PointerEvent) => {
-      const deltaX = Math.abs(event.clientX - pointerStartX.current);
-      const deltaY = Math.abs(event.clientY - pointerStartY.current);
-
-      // Ignore drag/scroll gestures and only react to tap-like interactions.
-      if (deltaX < 10 && deltaY < 10) {
-        revealControl();
-      }
+    const onTapLikeInteraction = () => {
+      revealControl();
     };
 
     const onKeyDown = () => {
       revealControl();
     };
 
-    window.addEventListener('pointerdown', onPointerDown, {
+    window.addEventListener('click', onTapLikeInteraction, {
       passive: true,
     });
-    window.addEventListener('pointerup', onPointerUp, {
+    window.addEventListener('touchend', onTapLikeInteraction, {
       passive: true,
     });
     window.addEventListener('keydown', onKeyDown);
@@ -142,18 +165,24 @@ function FullscreenToggle() {
         .matches;
     let cleanupAutoEnter: (() => void) | null = null;
 
-    if (
-      autoEnabled &&
-      isMobileDevice &&
-      !document.fullscreenElement
-    ) {
+    if (autoEnabled && isMobileDevice && !getFullscreenElement()) {
       const autoEnter = () => {
         void requestFullscreen();
         window.removeEventListener('pointerdown', autoEnter, true);
+        window.removeEventListener('touchstart', autoEnter, true);
+        window.removeEventListener('click', autoEnter, true);
         window.removeEventListener('keydown', autoEnter, true);
       };
 
       window.addEventListener('pointerdown', autoEnter, {
+        passive: true,
+        capture: true,
+      });
+      window.addEventListener('touchstart', autoEnter, {
+        passive: true,
+        capture: true,
+      });
+      window.addEventListener('click', autoEnter, {
         passive: true,
         capture: true,
       });
@@ -163,21 +192,29 @@ function FullscreenToggle() {
 
       cleanupAutoEnter = () => {
         window.removeEventListener('pointerdown', autoEnter, true);
+        window.removeEventListener('touchstart', autoEnter, true);
+        window.removeEventListener('click', autoEnter, true);
         window.removeEventListener('keydown', autoEnter, true);
       };
     }
 
     return () => {
       cleanupAutoEnter?.();
-      window.removeEventListener('pointerdown', onPointerDown);
-      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('click', onTapLikeInteraction);
+      window.removeEventListener('touchend', onTapLikeInteraction);
       window.removeEventListener('keydown', onKeyDown);
 
       if (hideTimer.current !== null) {
         window.clearTimeout(hideTimer.current);
+        hideTimer.current = null;
       }
     };
-  }, [isSupported, requestFullscreen, revealControl]);
+  }, [
+    getFullscreenElement,
+    isSupported,
+    requestFullscreen,
+    revealControl,
+  ]);
 
   if (!isSupported) {
     return null;
