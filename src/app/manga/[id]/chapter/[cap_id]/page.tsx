@@ -4,6 +4,7 @@ import { ListPages } from '@/components/list-pages';
 import { Button } from '@/components/ui/button';
 
 import { Comments } from '@/components/chapter/comments';
+import { FullscreenToggle } from '@/components/chapter/fullscreen-toggle';
 import { ProgressTracker } from '@/components/chapter/progress-tracker';
 import { Link } from '@/components/ui/link';
 import Chapter from '@/services/actions/Chapter';
@@ -50,7 +51,8 @@ async function ChapterPage({
   ]);
 
   return (
-    <div className="flex flex-col gap-8 py-4 items-center max-w-[800px] mx-auto">
+    <div className="flex flex-col gap-8 py-4 items-center max-w-[800px] mx-auto touch-manipulation">
+      <FullscreenToggle />
       <Link href={`/manga/${id}/`}>
         <h2 className="text-2xl text-neutral-500 font-semibold hover:underline hover:text-neutral-700 transition-all">
           {manhwa?.title}
