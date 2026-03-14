@@ -11,6 +11,9 @@ function FullscreenToggle() {
   const [isSupported, setIsSupported] = useState(false);
   const [isControlVisible, setIsControlVisible] = useState(true);
   const hideTimer = useRef<number | null>(null);
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
+  const touchMoved = useRef(false);
 
   const getFullscreenElement = useCallback(() => {
     const webkitFullscreenElement = (
@@ -141,28 +144,67 @@ function FullscreenToggle() {
 
     revealControl();
 
+    const isMobileDevice =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(hover: none) and (pointer: coarse)')
+        .matches;
+
     const onTapLikeInteraction = () => {
       revealControl();
+    };
+
+    const onTouchStart = (event: TouchEvent) => {
+      const touch = event.changedTouches[0];
+      if (!touch) return;
+
+      touchMoved.current = false;
+      touchStartX.current = touch.clientX;
+      touchStartY.current = touch.clientY;
+    };
+
+    const onTouchMove = (event: TouchEvent) => {
+      const touch = event.changedTouches[0];
+      if (!touch) return;
+
+      const deltaX = Math.abs(touch.clientX - touchStartX.current);
+      const deltaY = Math.abs(touch.clientY - touchStartY.current);
+
+      if (deltaX > 10 || deltaY > 10) {
+        touchMoved.current = true;
+      }
+    };
+
+    const onTouchEnd = () => {
+      if (!touchMoved.current) {
+        revealControl();
+      }
     };
 
     const onKeyDown = () => {
       revealControl();
     };
 
-    window.addEventListener('click', onTapLikeInteraction, {
-      passive: true,
-    });
-    window.addEventListener('touchend', onTapLikeInteraction, {
-      passive: true,
-    });
+    if (isMobileDevice) {
+      window.addEventListener('touchstart', onTouchStart, {
+        passive: true,
+      });
+      window.addEventListener('touchmove', onTouchMove, {
+        passive: true,
+      });
+      window.addEventListener('touchend', onTouchEnd, {
+        passive: true,
+      });
+    } else {
+      window.addEventListener('click', onTapLikeInteraction, {
+        passive: true,
+      });
+    }
+
     window.addEventListener('keydown', onKeyDown);
 
     const autoEnabled =
       localStorage.getItem(AUTO_FULLSCREEN_KEY) === '1';
-    const isMobileDevice =
-      typeof window.matchMedia === 'function' &&
-      window.matchMedia('(hover: none) and (pointer: coarse)')
-        .matches;
+
     let cleanupAutoEnter: (() => void) | null = null;
 
     if (autoEnabled && isMobileDevice && !getFullscreenElement()) {
@@ -200,8 +242,10 @@ function FullscreenToggle() {
 
     return () => {
       cleanupAutoEnter?.();
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
       window.removeEventListener('click', onTapLikeInteraction);
-      window.removeEventListener('touchend', onTapLikeInteraction);
       window.removeEventListener('keydown', onKeyDown);
 
       if (hideTimer.current !== null) {
