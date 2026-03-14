@@ -31,7 +31,10 @@ const Header: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const lastScrollY = useRef(0);
+  const ticking = useRef(false);
 
   // Toggle Command Palette with Ctrl+K
   useEffect(() => {
@@ -59,9 +62,48 @@ const Header: React.FC = () => {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
+  // Hide header while scrolling down and reveal when scrolling up.
+  useEffect(() => {
+    const onScroll = () => {
+      if (ticking.current || mobileOpen) return;
+
+      ticking.current = true;
+
+      requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY;
+        const delta = currentScrollY - lastScrollY.current;
+
+        if (currentScrollY < 24) {
+          setIsHeaderHidden(false);
+        } else if (Math.abs(delta) > 6) {
+          setIsHeaderHidden(delta > 0);
+        }
+
+        lastScrollY.current = currentScrollY;
+        ticking.current = false;
+      });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    if (mobileOpen) {
+      setIsHeaderHidden(false);
+    }
+  }, [mobileOpen]);
+
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
+      <header
+        className={`sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60 transition-transform duration-200 ease-out ${
+          isHeaderHidden ? '-translate-y-full' : 'translate-y-0'
+        }`}
+      >
         <nav className="max-w-7xl mx-auto flex items-center justify-between h-16 px-4 sm:px-8">
           {/* Logo */}
           <Link
