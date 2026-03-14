@@ -1,11 +1,12 @@
 import { Metadata } from 'next';
 
-import { ListPages } from '@/components/list-pages';
 import { Button } from '@/components/ui/button';
 
+import { AutoNextChapter } from '@/components/chapter/auto-next-chapter';
 import { Comments } from '@/components/chapter/comments';
 import { FullscreenToggle } from '@/components/chapter/fullscreen-toggle';
 import { ProgressTracker } from '@/components/chapter/progress-tracker';
+import { ListPages } from '@/components/list-pages';
 import { Link } from '@/components/ui/link';
 import Chapter from '@/services/actions/Chapter';
 import Manhwa from '@/services/actions/Manhwa';
@@ -77,6 +78,7 @@ async function ChapterPage({
       </div>
 
       <ListPages chapter={data} />
+      <AutoNextChapter mangaId={id} nextChapterId={data?.next?.id} />
       {data && manhwa && (
         <ProgressTracker
           manhwaId={manhwa.id}

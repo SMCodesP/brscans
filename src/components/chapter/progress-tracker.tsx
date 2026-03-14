@@ -62,7 +62,13 @@ export function ProgressTracker({
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          const pages = document.querySelectorAll('.chapter-page');
+          const trackedPages = document.querySelectorAll(
+            '.chapter-page[data-track-progress="true"]'
+          );
+          const pages =
+            trackedPages.length > 0
+              ? trackedPages
+              : document.querySelectorAll('.chapter-page');
           if (pages.length === 0) {
             ticking = false;
             return;

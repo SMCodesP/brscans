@@ -39,6 +39,7 @@ async function ListPages({
               key={page.id}
               id={`page-${index + 1}`}
               data-page-index={index + 1}
+              data-track-progress="true"
               src={String((page.images as any)[type || 'original'])}
               alt={`Página ${index + 1}`}
               className="w-full chapter-page"
