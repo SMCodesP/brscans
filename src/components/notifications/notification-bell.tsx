@@ -75,8 +75,9 @@ export function NotificationBell() {
     }
   };
 
+  const now = Date.now();
   const formatDate = (dateStr: string) => {
-    const diff = new Date().getTime() - new Date(dateStr).getTime();
+    const diff = now - new Date(dateStr).getTime();
     const minutes = Math.floor(diff / 60000);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
