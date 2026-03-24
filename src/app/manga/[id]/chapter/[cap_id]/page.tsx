@@ -78,7 +78,7 @@ async function ChapterPage({
       </div>
 
       <ListPages chapter={data} />
-      <AutoNextChapter mangaId={id} nextChapterId={data?.next?.id} />
+      {/* <AutoNextChapter mangaId={id} nextChapterId={data?.next?.id} /> */}
       {data && manhwa && (
         <ProgressTracker
           manhwaId={manhwa.id}
