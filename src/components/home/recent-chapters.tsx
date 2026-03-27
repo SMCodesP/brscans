@@ -18,14 +18,19 @@ function timeAgo(dateStr: string): string {
   if (diffMins < 60) return `há ${diffMins}min`;
   if (diffHours < 24) return `há ${diffHours}h`;
   if (diffDays < 7) return `há ${diffDays}d`;
-  return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+  return date.toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: 'short',
+  });
 }
 
 interface RecentChaptersProps {
   chapters: TRecentChapter[];
 }
 
-export default function RecentChapters({ chapters }: RecentChaptersProps) {
+export default function RecentChapters({
+  chapters,
+}: RecentChaptersProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   if (!chapters.length) return null;

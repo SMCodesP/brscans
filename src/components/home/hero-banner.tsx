@@ -20,7 +20,9 @@ export default function HeroBanner({ mangas }: HeroBannerProps) {
   }, [featured.length]);
 
   const prev = useCallback(() => {
-    setCurrent((prev) => (prev - 1 + featured.length) % featured.length);
+    setCurrent(
+      (prev) => (prev - 1 + featured.length) % featured.length
+    );
   }, [featured.length]);
 
   useEffect(() => {

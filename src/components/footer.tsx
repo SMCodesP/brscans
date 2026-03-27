@@ -15,8 +15,8 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-              Seu portal para ler mangás e manhwas traduzidos em português com
-              qualidade e atualizações frequentes.
+              Seu portal para ler mangás e manhwas traduzidos em
+              português com qualidade e atualizações frequentes.
             </p>
           </div>
 
@@ -96,8 +96,8 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-10 pt-6 border-t border-border/30 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground">
-            &copy; {new Date().getFullYear()} BRScans. Todos os direitos
-            reservados.
+            &copy; {new Date().getFullYear()} BRScans. Todos os
+            direitos reservados.
           </p>
           <p className="text-xs text-muted-foreground">
             Feito com 💜 para a comunidade
