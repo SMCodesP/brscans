@@ -6,7 +6,6 @@ import { Sparkles } from 'lucide-react';
 import ContinueReading from '@/components/home/continue-reading';
 import HeroBanner from '@/components/home/hero-banner';
 import MangaCard from '@/components/home/manga-card';
-import RecentChapters from '@/components/home/recent-chapters';
 import TopMangas from '@/components/home/top-mangas';
 import Welcome from '@/components/welcome';
 
@@ -49,6 +48,25 @@ async function Home() {
 
   const mangas = latestManhwas?.results || [];
 
+  const recentByManga = new Map<number, number>();
+  for (const chapter of recentChapters || []) {
+    const dateStr = chapter.release_date ?? chapter.created_at;
+    const timestamp = dateStr ? new Date(dateStr).getTime() : 0;
+    if (!Number.isNaN(timestamp)) {
+      const current = recentByManga.get(chapter.manhwa.id) || 0;
+      if (timestamp > current)
+        recentByManga.set(chapter.manhwa.id, timestamp);
+    }
+  }
+
+  const mangasOrderedByRecentChapters = [...mangas].sort((a, b) => {
+    const aRecent = recentByManga.get(a.id) || 0;
+    const bRecent = recentByManga.get(b.id) || 0;
+
+    if (aRecent !== bRecent) return bRecent - aRecent;
+    return b.id - a.id;
+  });
+
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-8 pb-16">
       {/* Quote Banner */}
@@ -65,13 +83,6 @@ async function Home() {
         </section>
       )}
 
-      {/* Recent Chapters */}
-      {recentChapters && recentChapters.length > 0 && (
-        <section className="mt-12">
-          <RecentChapters chapters={recentChapters} />
-        </section>
-      )}
-
       {/* Content grid: Top Mangas + Latest Added */}
       <div className="mt-12 grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-10">
         <div className="flex flex-col min-w-0">
@@ -85,9 +96,11 @@ async function Home() {
               Lançamento
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {mangas.slice(0, 12).map((manga) => (
-                <MangaCard key={manga.id} manga={manga} />
-              ))}
+              {mangasOrderedByRecentChapters
+                .slice(0, 12)
+                .map((manga) => (
+                  <MangaCard key={manga.id} manga={manga} />
+                ))}
             </div>
             <div className="flex justify-center mt-4">
               <Button>

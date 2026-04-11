@@ -77,7 +77,7 @@ export async function ChapterList({
       </div>
 
       <ul className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3 mt-2">
-        {chapters.map((chapter, index) => {
+        {chapters.reverse().map((chapter, index) => {
           const isRead = readSet.has(chapter.id);
           const chapterDate =
             chapter.created_at || chapter.release_date;
