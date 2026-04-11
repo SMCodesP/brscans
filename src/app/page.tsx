@@ -37,35 +37,12 @@ export const metadata: Metadata = {
 async function Home() {
   const manhwaService = new Manhwa();
 
-  const [latestManhwas, recentChapters, topMangas] =
-    await Promise.all([
-      manhwaService.getLatest().catch(() => null),
-      manhwaService
-        .getRecentChapters(20)
-        .catch(() => [] as TRecentChapter[]),
-      manhwaService.getTopMangas(10).catch(() => [] as TManga[]),
-    ]);
+  const [latestManhwas, topMangas] = await Promise.all([
+    manhwaService.getLatest().catch(() => null),
+    manhwaService.getTopMangas(10).catch(() => [] as TManga[]),
+  ]);
 
   const mangas = latestManhwas?.results || [];
-
-  const recentByManga = new Map<number, number>();
-  for (const chapter of recentChapters || []) {
-    const dateStr = chapter.release_date ?? chapter.created_at;
-    const timestamp = dateStr ? new Date(dateStr).getTime() : 0;
-    if (!Number.isNaN(timestamp)) {
-      const current = recentByManga.get(chapter.manhwa.id) || 0;
-      if (timestamp > current)
-        recentByManga.set(chapter.manhwa.id, timestamp);
-    }
-  }
-
-  const mangasOrderedByRecentChapters = [...mangas].sort((a, b) => {
-    const aRecent = recentByManga.get(a.id) || 0;
-    const bRecent = recentByManga.get(b.id) || 0;
-
-    if (aRecent !== bRecent) return bRecent - aRecent;
-    return b.id - a.id;
-  });
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-8 pb-16">
@@ -96,11 +73,9 @@ async function Home() {
               Lançamento
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {mangasOrderedByRecentChapters
-                .slice(0, 12)
-                .map((manga) => (
-                  <MangaCard key={manga.id} manga={manga} />
-                ))}
+              {mangas.slice(0, 12).map((manga) => (
+                <MangaCard key={manga.id} manga={manga} />
+              ))}
             </div>
             <div className="flex justify-center mt-4">
               <Button>
