@@ -1,6 +1,6 @@
 export async function translateQuote(quote: string): Promise<string> {
   const res = await fetch(
-    'https://ds2api-blond.vercel.app/v1/chat/completions',
+    'https://ds2api-codes.vercel.app/v1/chat/completions',
     {
       method: 'POST',
       headers: {
