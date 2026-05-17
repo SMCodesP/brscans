@@ -9,6 +9,10 @@ import { getLuminance, transparentize } from 'polished';
 const Welcome: React.FC = async () => {
   const data = await getQuote();
 
+  if (!data) {
+    return null;
+  }
+
   const isLight = getLuminance(data.color_anime) < 0.25;
 
   return (

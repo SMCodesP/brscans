@@ -28,7 +28,10 @@ type TChracter = {
   };
 };
 
-async function getQuote(tries = 3, repeated = 0): Promise<TQuote> {
+async function getQuote(
+  tries = 3,
+  repeated = 0
+): Promise<TQuote | null> {
   try {
     const quotes = await yurippe
       .get('quotes', { searchParams: { random: 1 } })
@@ -108,7 +111,8 @@ async function getQuote(tries = 3, repeated = 0): Promise<TQuote> {
     if (repeated < tries) {
       return await getQuote(tries, repeated + 1);
     }
-    throw new Error(`Error in getQuote`);
+    return null;
+    // throw new Error(`Error in getQuote`);
   }
 }
 
