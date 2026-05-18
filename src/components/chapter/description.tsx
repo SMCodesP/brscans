@@ -12,7 +12,7 @@ import anilistImage from '@/public/anilist.svg';
 const ChapterDescription: React.FC<{
   manga: TManga;
 }> = async ({ manga }) => {
-  const anilist = await searchManga(manga?.title);
+  const anilist = await searchManga(manga?.title).catch(() => null);
 
   return (
     <div>
