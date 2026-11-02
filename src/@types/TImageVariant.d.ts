@@ -4,4 +4,5 @@ interface TImageVariant {
   medium: string | null;
   original: string | null;
   translated: string | null;
+  raw?: string | null;
 }

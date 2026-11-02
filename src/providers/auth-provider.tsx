@@ -14,6 +14,7 @@ interface User {
   id: number;
   username: string;
   email: string;
+  is_staff?: boolean;
   profile: {
     avatar: string | null;
     bio: string;

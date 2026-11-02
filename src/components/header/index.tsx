@@ -9,6 +9,7 @@ import {
   LogOut,
   Menu,
   Search,
+  Shield,
   User,
   X,
 } from 'lucide-react';
@@ -211,6 +212,16 @@ const Header: React.FC = () => {
                           <Heart className="w-4 h-4" />
                           Favoritos
                         </Link>
+                        {user.is_staff && (
+                          <Link
+                            href="/admin"
+                            className="flex items-center gap-2 px-4 py-2.5 text-sm text-foreground hover:bg-accent transition-colors"
+                            onClick={() => setDropdownOpen(false)}
+                          >
+                            <Shield className="w-4 h-4" />
+                            Painel
+                          </Link>
+                        )}
                         <div className="border-t border-border my-1" />
                         <button
                           onClick={() => {
@@ -301,6 +312,16 @@ const Header: React.FC = () => {
                     <Heart className="w-4 h-4" />
                     Favoritos
                   </Link>
+                  {user.is_staff && (
+                    <Link
+                      href="/admin"
+                      className="flex items-center gap-2 px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      <Shield className="w-4 h-4" />
+                      Painel
+                    </Link>
+                  )}
                   <button
                     onClick={() => {
                       logout();
