@@ -27,6 +27,7 @@ function AdminPanel() {
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<TSourceStatus | ''>('');
   const [link, setLink] = useState('');
+  const [isNsfw, setIsNsfw] = useState(false);
   const [limit, setLimit] = useState('5');
   const [busy, setBusy] = useState(false);
   const [page, setPage] = useState(1);
@@ -81,8 +82,11 @@ function AdminPanel() {
                 run(
                   () =>
                     admin
-                      .addManhwa(link, Number(limit) || undefined)
-                      .then(() => setLink('')),
+                      .addManhwa(link, Number(limit) || undefined, isNsfw)
+                      .then(() => {
+                        setLink('');
+                        setIsNsfw(false);
+                      }),
                   'Adicionando em segundo plano; o manga aparece na lista quando pronto.'
                 );
               }}
@@ -102,6 +106,14 @@ function AdminPanel() {
                 onChange={(e) => setLimit(e.target.value)}
                 className="sm:w-28"
               />
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  checked={isNsfw}
+                  onChange={(e) => setIsNsfw(e.target.checked)}
+                />
+                NSFW (não avisa no Discord)
+              </label>
               <Button type="submit" disabled={busy || !link}>
                 {busy && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

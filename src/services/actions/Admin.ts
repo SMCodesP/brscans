@@ -24,10 +24,10 @@ const adminError = async (err: any, fallback: string) => {
  * e a maioria só enfileira task (202).
  */
 class Admin {
-  addManhwa(link: string, limit?: number) {
+  addManhwa(link: string, limit?: number, isNsfw = false) {
     return api
       .post<TAdminTaskQueued>('panel/manhwas/', {
-        json: { link, ...(limit ? { limit } : {}) },
+        json: { link, is_nsfw: isNsfw, ...(limit ? { limit } : {}) },
       })
       .json();
   }
