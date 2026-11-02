@@ -1,5 +1,6 @@
 'use client';
 
+import { MigrateSource } from '@/components/admin/migrate-source';
 import { Pager } from '@/components/admin/pager';
 import { ProblemsList } from '@/components/admin/problems-list';
 import { STATUS, SourceBadge } from '@/components/admin/source-badge';
@@ -61,6 +62,7 @@ function AdminPanel() {
         <TabsList className="mb-4">
           <TabsTrigger value="mangas">Mangás</TabsTrigger>
           <TabsTrigger value="problemas">Com problema</TabsTrigger>
+          <TabsTrigger value="migrar">Migrar fonte</TabsTrigger>
         </TabsList>
 
         <TabsContent value="mangas">
@@ -82,7 +84,11 @@ function AdminPanel() {
                 run(
                   () =>
                     admin
-                      .addManhwa(link, Number(limit) || undefined, isNsfw)
+                      .addManhwa(
+                        link,
+                        Number(limit) || undefined,
+                        isNsfw
+                      )
                       .then(() => {
                         setLink('');
                         setIsNsfw(false);
@@ -244,6 +250,10 @@ function AdminPanel() {
 
         <TabsContent value="problemas">
           <ProblemsList />
+        </TabsContent>
+
+        <TabsContent value="migrar">
+          <MigrateSource />
         </TabsContent>
       </Tabs>
     </main>

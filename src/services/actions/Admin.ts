@@ -8,6 +8,9 @@ const adminKeys = {
     `panel/manhwas/${id}/chapters/?page=${page}`,
   problems: (page = 1) => `panel/problems/?page=${page}`,
   chapterPages: (id: number) => `panel/chapters/${id}/pages/`,
+  sources: () => 'panel/sources/',
+  sourceSearch: (name: string, q: string) =>
+    `panel/sources/${encodeURIComponent(name)}/search/?q=${encodeURIComponent(q)}`,
 };
 
 const adminFetcher = <T>(url: string) => api.get(url).json<T>();
@@ -41,6 +44,15 @@ class Admin {
   sync(id: number) {
     return api
       .post<TAdminTaskQueued>(`panel/manhwas/${id}/sync/`)
+      .json();
+  }
+
+  /** Migra o manga para a URL escolhida na busca de outra fonte. */
+  migrate(id: number, url: string) {
+    return api
+      .post<TAdminMigration>(`panel/manhwas/${id}/migrate/`, {
+        json: { url },
+      })
       .json();
   }
 

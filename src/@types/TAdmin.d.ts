@@ -56,6 +56,32 @@ interface TAdminPage {
   };
 }
 
+interface TAdminSource {
+  name: string;
+  host: string;
+}
+
+interface TAdminSourceResult {
+  title: string;
+  url: string;
+  thumbnail: string | null;
+}
+
+interface TAdminSourceSearch {
+  source: string;
+  results: TAdminSourceResult[];
+}
+
+interface TAdminMigration {
+  source: string;
+  /** Capítulos que já existiam e trocaram de fonte. */
+  matched: number;
+  /** Capítulos que só existem na fonte nova (entram pelo sync). */
+  created: number;
+  /** Títulos sem par na fonte nova (regra 5 da spec). */
+  unmatched: string[];
+}
+
 interface TAdminTaskQueued {
   /** null quando a task roda no Zappa (sem id, a resposta vem do sync). */
   task: string | null;
