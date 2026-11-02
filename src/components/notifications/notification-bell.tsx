@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/providers/auth-provider';
 import { api } from '@/services/api';
-import { Bell, Check, CheckCircle2, Trash2 } from 'lucide-react';
+import { Bell, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 import * as React from 'react';
 import useSWR from 'swr';
@@ -32,7 +32,8 @@ export function NotificationBell() {
   const { data: notifications, mutate } = useSWR(
     user && token ? `notifications/` : null,
     fetcher,
-    { refreshInterval: 60000 } // Refresh every minute
+    // "Capítulo novo" não precisa de tempo real.
+    { refreshInterval: 300000 }
   );
 
   const unreadCount =

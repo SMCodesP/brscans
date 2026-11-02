@@ -109,6 +109,8 @@ async function ChapterPage({
   );
 }
 
-export const revalidate = 30;
+// ISR é regenerado por acesso, não por tempo: 30 s revalidava a Lambda à toa
+// a cada meio minuto de tráfego. 5 min basta para "Traduzindo..." acabar.
+export const revalidate = 300;
 
 export default ChapterPage;

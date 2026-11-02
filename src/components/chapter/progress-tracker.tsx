@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/providers/auth-provider';
 import { api } from '@/services/api';
-import { useDebounceFn } from 'ahooks';
+import { useEventListener, useInterval, useUnmount } from 'ahooks';
 import * as React from 'react';
 
 interface ProgressTrackerProps {
@@ -17,42 +17,56 @@ export function ProgressTracker({
   totalPages,
 }: ProgressTrackerProps) {
   const { user, token } = useAuth();
-  const [markedRead, setMarkedRead] = React.useState(false);
+  // página que o scroll viu por último; o intervalo grava daqui
+  const lastPage = React.useRef<number | null>(null);
+  const savedPage = React.useRef<number | null>(null);
+  const markedRead = React.useRef(false);
 
-  const saveProgress = async (pageNumber: number) => {
+  const saveNow = () => {
     if (!user || !token) return;
-    try {
-      await api.post(`manhwas/${manhwaId}/progress/`, {
+    const page = lastPage.current;
+    if (page === null || page === savedPage.current) return;
+    savedPage.current = page;
+    api
+      .post(`manhwas/${manhwaId}/progress/`, {
         headers: { Authorization: `Token ${token}` },
-        json: { chapter_id: chapterId, page_number: pageNumber },
-      });
-    } catch (e) {
-      console.error('Failed to save reading progress', e);
+        json: { chapter_id: chapterId, page_number: page },
+        // sobrevive ao fechamento da aba
+        keepalive: true,
+      })
+      .catch((e) =>
+        console.error('Failed to save reading progress', e)
+      );
+
+    if (page === totalPages && !markedRead.current) {
+      api
+        .post(`chapters/${chapterId}/mark-read/`, {
+          headers: { Authorization: `Token ${token}` },
+          keepalive: true,
+        })
+        .then(() => {
+          markedRead.current = true;
+        })
+        .catch((e) =>
+          console.error('Failed to mark chapter as read', e)
+        );
     }
   };
 
-  const markChapterAsRead = async () => {
-    if (!user || !token || markedRead) return;
-    try {
-      await api.post(`chapters/${chapterId}/mark-read/`, {
-        headers: { Authorization: `Token ${token}` },
-      });
-      setMarkedRead(true);
-    } catch (e) {
-      console.error('Failed to mark chapter as read', e);
-    }
-  };
-
-  const { run: debouncedSaveProgress } = useDebounceFn(
-    (pageNumber: number) => {
-      console.log('Saving progress for page', pageNumber);
-      saveProgress(pageNumber);
-      if (pageNumber === totalPages && totalPages > 0) {
-        markChapterAsRead();
-      }
+  // Grava no máximo a cada 10 s e só quando a página mudou (antes: a cada
+  // 400 ms de pausa no scroll); descarrega ao esconder a aba.
+  useInterval(
+    () => {
+      if (!document.hidden) saveNow();
     },
-    { wait: 400 }
+    user && totalPages > 0 ? 10000 : -1
   );
+  useEventListener('visibilitychange', saveNow, {
+    target: () => document,
+  });
+  useEventListener('pagehide', saveNow);
+  // navegar para o próximo capítulo no cliente não dispara pagehide
+  useUnmount(saveNow);
 
   React.useEffect(() => {
     if (!user || totalPages === 0) return;
@@ -94,7 +108,7 @@ export function ProgressTracker({
           });
 
           if (activeIndex) {
-            debouncedSaveProgress(parseInt(activeIndex, 10));
+            lastPage.current = parseInt(activeIndex, 10);
           }
 
           ticking = false;
@@ -112,7 +126,7 @@ export function ProgressTracker({
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [user, totalPages, debouncedSaveProgress]);
+  }, [user, totalPages]);
 
   return null;
 }
