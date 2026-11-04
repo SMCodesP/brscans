@@ -114,7 +114,7 @@ export function CommandPalette({
                       {manga.author || 'Autor desconhecido'}
                     </span>
                     <span className="text-xs bg-accent text-accent-foreground px-1.5 py-0.5 rounded">
-                      {manga.status}
+                      {manga.status_display}
                     </span>
                   </div>
                 </div>

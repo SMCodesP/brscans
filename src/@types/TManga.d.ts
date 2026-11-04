@@ -3,7 +3,8 @@ interface TManga {
   thumbnail: TImageVariant;
   title: string;
   original_title: string | null;
-  status: string;
+  status: 'ongoing' | 'completed';
+  status_display: string;
   description: string;
   original_description: string | null;
   external_id: string;

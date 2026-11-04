@@ -67,7 +67,7 @@ export default function TopMangas({ mangas }: TopMangasProps) {
                   {manga.title}
                 </h3>
                 <p className="text-xs text-muted-foreground line-clamp-1">
-                  {manga.status}
+                  {manga.status_display}
                 </p>
               </div>
             </div>
